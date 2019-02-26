@@ -157,6 +157,7 @@ public class ControladorCuenta implements Initializable {
             else{
              ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
              odb.store(LoginTemp.getClienteActual());
+             odb.commit();
              odb.close();
             }
             lblAdvertencia.setText("");

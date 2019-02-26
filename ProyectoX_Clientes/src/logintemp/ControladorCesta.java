@@ -612,6 +612,7 @@ public class ControladorCesta implements Initializable {
                     Compras compra = new Compras(LoginTemp.cesta.getCliente(), LoginTemp.cesta.getCuenta(), LoginTemp.cesta.isFormaPago());
                     compra.setPrecioTotal(Float.parseFloat(txtImporteTotal.getText()));
                     odb.store(compra);
+                    odb.commit();
                     
                     cq = new CriteriaQuery(Compras.class);
                     Objects<Compras> l = odb.getObjects(cq);
@@ -625,6 +626,7 @@ public class ControladorCesta implements Initializable {
 
                         
                         odb.store(compra);
+                        odb.commit();
 
                     }
                     limpiarCesta();

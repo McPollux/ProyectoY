@@ -109,6 +109,7 @@ public class ControladorRegistrar implements Initializable {
                                         contra, txtDni.getText(), txtNombre.getText(), txtDireccion.getText(),
                                         txtTelefono.getText(), txtEmail.getText());
                                 odb.store(c);
+                                odb.commit();
                                 odb.close();
                             }
                              win.abrirVentana("/logintemp/FXMLDocument.fxml");
