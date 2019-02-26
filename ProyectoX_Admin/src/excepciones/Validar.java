@@ -19,7 +19,7 @@ public class Validar {
         
         try {
             if (tlf.length() != 9) {
-                throw new Excepciones("El teléfono debe ser de 9 carácteres");
+                throw new Excepciones("El teléfono debe ser de 9 carActeres");
             } else {
                 if (!tlf.substring(0).matches("[0-9]*")) {
                     throw new Excepciones("El teléfono debe ser un número");
