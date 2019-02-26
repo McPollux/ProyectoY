@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logintemp.ControladorCuenta">
+   <children>
+      <ImageView fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../fotos/FondoCliente.png" />
+         </image>
+      </ImageView>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="259.0" layoutX="193.0" layoutY="176.0" opacity="0.16" stroke="BLACK" strokeType="INSIDE" width="414.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="293.0" layoutY="55.0" prefHeight="65.0" prefWidth="188.0" text="Mi cuenta">
+         <font>
+            <Font name="Arial Bold" size="30.0" />
+         </font>
+      </Label>
+      <VBox layoutX="214.0" layoutY="196.0" prefHeight="248.0" prefWidth="136.0" spacing="15.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="29.0" prefWidth="172.0" text="Correo" />
+            <Label alignment="CENTER" prefHeight="29.0" prefWidth="145.0" text="Nombre Usuario" />
+            <Label alignment="CENTER" prefHeight="29.0" prefWidth="147.0" text="Nombre" />
+            <Label alignment="CENTER" prefHeight="29.0" prefWidth="153.0" text="Direccion" />
+            <Label alignment="CENTER" prefHeight="29.0" prefWidth="165.0" text="Telefono" />
+         </children>
+      </VBox>
+      <VBox layoutX="413.0" layoutY="196.0" prefHeight="248.0" prefWidth="136.0" spacing="20.0">
+         <children>
+            <JFXTextField fx:id="txtCorreo" editable="false" />
+            <JFXTextField fx:id="txtUsuario" editable="false" />
+            <JFXTextField fx:id="txtNombre" editable="false" />
+            <JFXTextField fx:id="txtDireccion" editable="false" />
+            <JFXTextField fx:id="txtTelf" editable="false" />
+         </children>
+      </VBox>
+      <JFXButton fx:id="btnAceptar" layoutX="293.0" layoutY="494.0" onAction="#aceptar" prefHeight="25.0" prefWidth="214.0" style="-fx-background-color: #7bccaa;" text="Aceptar" visible="false" />
+      <JFXButton fx:id="btnCancelar" layoutX="293.0" layoutY="536.0" onAction="#noEdit" prefHeight="25.0" prefWidth="214.0" style="-fx-background-color: #7bccaa;" text="Cancelar" visible="false" />
+      <JFXButton layoutX="735.0" layoutY="32.0" onAction="#ajustes" text=" ">
+         <graphic>
+            <ImageView fitHeight="36.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../fotos/ajustes.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <MenuBar layoutY="-2.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0" prefWidth="800.0" style="-fx-background-color: #7bccaa;">
+         <menus>
+            <Menu mnemonicParsing="false" text="Salir">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#cerrarSesion" text="Cerrar Sesión" />
+                  <MenuItem mnemonicParsing="false" onAction="#salir" text="Salir" />
+               </items>
+            </Menu>
+            <Menu fx:id="miNombre" mnemonicParsing="false" text="Nombre Usuario">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#cuenta" text="Mi cuenta" />
+                  <MenuItem mnemonicParsing="false" onAction="#miBanco" text="MiBanco" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Mis Pedidos">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#pedidosRealizados" text="Pedidos Realizados" />
+                  <MenuItem mnemonicParsing="false" onAction="#cesta" text="Mi cesta" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Tienda">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#tienda" text="Ir a la tienda" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <Label fx:id="lblAdvertencia" contentDisplay="CENTER" layoutX="193.0" layoutY="453.0" prefHeight="17.0" prefWidth="414.0" />
+   </children>
+</Pane>
