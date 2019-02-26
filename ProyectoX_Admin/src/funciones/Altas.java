@@ -74,7 +74,7 @@ public class Altas {
 
                     } else {
 
-                        ODB odb = ODBFactory.openClient("localhost", 8000, "proyectoJJCV");
+                        ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
 
                         Objects<Gestores> gestor = odb.getObjects(new CriteriaQuery(Gestores.class, Where.equal("id", id)));
 

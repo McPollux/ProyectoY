@@ -29,7 +29,7 @@ public class SesionOperation {
 
     //método para dar de alta un objeto en Neodatis
     public static void insertarNeo(Object o) {
-        ODB odb = ODBFactory.openClient("localhost", 8000, "proyectoJJCV");
+        ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
 
         odb.store(o);
 
@@ -51,7 +51,7 @@ public class SesionOperation {
     
     //método para dar de baja un objeto en Neodatis
     public static void eliminarNeo(Object o) {
-        ODB odb = ODBFactory.openClient("localhost", 8000, "proyectoJJCV");
+        ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
 
         odb.delete(o);
 
@@ -73,7 +73,7 @@ public class SesionOperation {
     
     //método para modificar un objeto en Neodatis
     public static void modificarNeo(Object o) {
-        ODB odb = ODBFactory.openClient("localhost", 8000, "proyectoJJCV");
+        ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
         
         odb.store(o);
 

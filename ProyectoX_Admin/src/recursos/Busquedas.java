@@ -36,7 +36,7 @@ public class Busquedas {
 
         } else {
 
-            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectoJJCV");
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
 
             Objects<Proveedores> provs = odb.getObjects(Proveedores.class);
 
@@ -61,7 +61,7 @@ public class Busquedas {
 
         } else {
 
-            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectoJJCV");
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
 
             Objects<Productos> prods = odb.getObjects(Productos.class);
 
@@ -86,7 +86,7 @@ public class Busquedas {
 
         } else {
 
-            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectoJJCV");
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
 
             Objects<Clientes> clients = odb.getObjects(Clientes.class);
 
@@ -113,7 +113,7 @@ public class Busquedas {
 
         } else {
 
-            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectoJJCV");
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
 
             Objects<Usuarios> lista = odb.getObjects(new CriteriaQuery(Usuarios.class, Where.equal("user", usuario)));
 
@@ -142,7 +142,7 @@ public class Busquedas {
 
         } else {
 
-            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectoJJCV");
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
 
             Objects<Usuarios> lista = odb.getObjects(new CriteriaQuery(Usuarios.class, Where.equal("user", usuario)));
 
@@ -171,7 +171,7 @@ public class Busquedas {
 
         } else {
 
-            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectoJJCV");
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
 
             Objects<Productos> lista = odb.getObjects(new CriteriaQuery(Productos.class, Where.equal("nombre", nombre)));
 
@@ -200,7 +200,7 @@ public class Busquedas {
 
         } else {
 
-            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectoJJCV");
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
 
             Objects<Productos> lista = odb.getObjects(new CriteriaQuery(Productos.class, Where.equal("nombre", nombre)));
 
@@ -230,7 +230,7 @@ public class Busquedas {
 
         } else {
             
-            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectoJJCV");
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
 
             Objects<Proveedores> lista = odb.getObjects(new CriteriaQuery(Proveedores.class, Where.equal("cif", cif)));
 
