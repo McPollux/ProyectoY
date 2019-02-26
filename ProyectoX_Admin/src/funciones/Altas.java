@@ -161,12 +161,10 @@ public class Altas {
 
                 Usuarios g = new Gestores(usuario, contraseña.hashCode());
 
-                if (ProyectoX_Admin.gestor == 0) {
-                    SesionOperation.insertar(g);
-                } else {
-                    SesionOperation.insertarNeo(g);
-                }
-
+                SesionOperation.insertar(g);
+                
+				SesionOperation.insertarNeo(g);
+                
                 bien = true;
             }
         } else {
