@@ -72,6 +72,6 @@
             <ToggleGroup fx:id="a" />
          </toggleGroup>
       </JFXRadioButton>
-      <JFXRadioButton fx:id="hiberbuton" layoutX="311.0" layoutY="471.0" onMouseClicked="#hiberclicked" selected="true" text="Hibernate" toggleGroup="$a" />
+      <JFXRadioButton fx:id="hiberbuton" layoutX="311.0" layoutY="471.0" onMouseClicked="#hiberclicked" selected="true" style="-jfx-selected-color: #0777FF;" text="Hibernate" toggleGroup="$a" />
    </children>
 </Pane>
