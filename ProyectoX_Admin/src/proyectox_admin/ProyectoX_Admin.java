@@ -18,6 +18,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.hibernate.SessionFactory;
+import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.ODBServer;
 import recursos.*;
 
 /**
@@ -55,6 +57,10 @@ public class ProyectoX_Admin extends Application {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        
+        ODBServer server=ODBFactory.openServer(8000);
+        server.addBase("proyectojjcv", "proyectojjcv.db");
+        server.startServer(true);
         
         
         launch(args);

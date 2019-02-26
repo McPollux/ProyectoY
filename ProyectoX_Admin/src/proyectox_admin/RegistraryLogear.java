@@ -6,6 +6,7 @@
 package proyectox_admin;
 
 import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXRadioButton;
 import funciones.Altas;
 import com.jfoenix.controls.JFXTextField;
 import java.io.File;
@@ -22,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
 /**         vaciar campos    
  *
@@ -30,6 +32,13 @@ import javafx.scene.input.KeyEvent;
 public class RegistraryLogear implements Initializable {
      @FXML
     private final libreriadelpalo lib=new libreriadelpalo();      
+     
+
+
+
+     
+    @FXML
+    private JFXRadioButton neobuton,hiberbuton;
 //REGISTRACION
     @FXML
     private JFXTextField regusuario;
@@ -55,6 +64,19 @@ public class RegistraryLogear implements Initializable {
             
     @FXML
     private ImageView elproimg;
+    
+    
+        @FXML
+    void neoclicked(MouseEvent event) {
+    System.out.println("neodatis selected");
+    ProyectoX_Admin.gestor=1;
+    }
+    
+             @FXML
+    void hiberclicked(MouseEvent event) {
+         System.out.println("hibernate selected");
+             ProyectoX_Admin.gestor=0;
+    }
     
                   @FXML
     private void on_salir(Event evt) {
