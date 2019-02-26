@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
@@ -45,6 +46,10 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import org.hibernate.Session;
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.Objects;
+import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 
 /**
  *
@@ -154,7 +159,8 @@ public class ControladorTienda implements Initializable {
         }
 
     }
-        private void MoverVentanas(Pane root) {
+
+    private void MoverVentanas(Pane root) {
 
         AtomicReference<Double> xOffset = new AtomicReference<>((double) 0);
         AtomicReference<Double> yOffset = new AtomicReference<>((double) 0);
@@ -182,10 +188,19 @@ public class ControladorTienda implements Initializable {
 
     @FXML
     public void buscar() {
-        Session s = NewHibernateUtil.getSession();
+        List<Productos> p = new ArrayList<>();
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
 
-        List<Productos> p = s.createCriteria(Productos.class).list();
-        s.close();
+            p = s.createCriteria(Productos.class).list();
+            s.close();
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Productos.class);
+            Objects<Productos> prod = odb.getObjects(cq);
+            p.addAll(prod);
+            odb.close();
+        }
         vbProductos.getChildren().clear();
         for (Productos productos : p) {
 
@@ -204,9 +219,9 @@ public class ControladorTienda implements Initializable {
     }
 
     public void AnhadirProducto(VBox principal, String nombre, String descripcion, float precio, ImageView imgProd) {
-       byte b=0;
-        for (Pedidos pe: LoginTemp.cesta.getPedidos()) {
-            if(pe.getProducto().getNombre().equals(nombre)){
+        byte b = 0;
+        for (Pedidos pe : LoginTemp.cesta.getPedidos()) {
+            if (pe.getProducto().getNombre().equals(nombre)) {
                 b = 1;
             }
         }
@@ -237,15 +252,15 @@ public class ControladorTienda implements Initializable {
         description.setStyle("-fx-padding: 10px;"); // debo revisar porque no funciona
         description.setStyle("-fx-border-color: black;");
 
-        Label price = new Label("Precio: " + precio+"€");
+        Label price = new Label("Precio: " + precio + "€");
         price.setPrefSize(200, 10);
-        if(b==0){
-        imgPlus.setOnMouseClicked((event) -> this.anhadirCesta(nombre, columna, imgPlus));
-        imgPlus.setOnMousePressed((event) -> this.cabiarImgSum(imgPlus));
-        imgPlus.setOnMouseReleased((event) -> this.volverSum(imgPlus));}
-        else{
-        Image check = new Image("/fotos/comprobado.png");
-        imgPlus.setImage(check);
+        if (b == 0) {
+            imgPlus.setOnMouseClicked((event) -> this.anhadirCesta(nombre, columna, imgPlus));
+            imgPlus.setOnMousePressed((event) -> this.cabiarImgSum(imgPlus));
+            imgPlus.setOnMouseReleased((event) -> this.volverSum(imgPlus));
+        } else {
+            Image check = new Image("/fotos/comprobado.png");
+            imgPlus.setImage(check);
         }
         price.setAlignment(Pos.CENTER);
         columna.getChildren().add(price);
@@ -253,7 +268,8 @@ public class ControladorTienda implements Initializable {
         principal.getChildren().add(columna);
 
     }
-     public void cabiarImgSum(ImageView imgReal) {
+
+    public void cabiarImgSum(ImageView imgReal) {
         Image img = new Image("/fotos/btnPlus2.png");
         imgReal.setImage(img);
     }
@@ -263,13 +279,21 @@ public class ControladorTienda implements Initializable {
         imgReal.setImage(img);
     }
 
-
     public void anhadirCesta(String nombre, HBox columna, ImageView imgPlus) {
         System.out.println("Llegó a añadir cesta");
-        Session s = NewHibernateUtil.getSession();
+        List<Productos> p = new ArrayList<>();
         byte b = 0;
-        List<Productos> p = s.createCriteria(Productos.class).list();
-        s.close();
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            p = s.createCriteria(Productos.class).list();
+            s.close();
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Productos.class);
+            Objects<Productos> prod = odb.getObjects(cq);
+            p.addAll(prod);
+            odb.close();
+        }
         for (Productos productos : p) {
 
             if (productos.getNombre().equals(nombre)) {

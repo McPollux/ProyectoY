@@ -36,6 +36,12 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.hibernate.Session;
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.Objects;
+import org.neodatis.odb.core.query.criteria.ICriterion;
+import org.neodatis.odb.core.query.criteria.Where;
+import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 
 /**
  *
@@ -46,7 +52,7 @@ public class FXMLDocumentController implements Initializable {
     private Windows win = new Windows();
     @FXML
     private ImageView btnlogin;
-    
+
     @FXML
     private Pane panel;
     @FXML
@@ -76,20 +82,38 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public boolean confirmarCliente() {
-        Session s = NewHibernateUtil.getSession();
-        List<Clientes> clientes = s.createCriteria(Clientes.class).list();
-        boolean b = false;
-        for (Clientes c : clientes) {
-            if (c.getUser().equals(txtUser.getText())) {
-                if (c.getContrasenha() == txtPass.getText().hashCode()) {
-                    b = true;
-                    LoginTemp.setClienteActual(c);  
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            List<Clientes> clientes = s.createCriteria(Clientes.class).list();
+            boolean b = false;
+            for (Clientes c : clientes) {
+                if (c.getUser().equals(txtUser.getText())) {
+                    if (c.getContrasenha() == txtPass.getText().hashCode()) {
+                        b = true;
+                        LoginTemp.setClienteActual(c);
+                    }
+                    break;
                 }
-                break;
             }
+            s.close();
+            return b;
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Clientes.class);
+            Objects<Clientes> clientes = odb.getObjects(cq);
+            boolean b = false;
+            for (Clientes c : clientes) {
+                if (c.getUser().equals(txtUser.getText())) {
+                    if (c.getContrasenha() == txtPass.getText().hashCode()) {
+                        b = true;
+                        LoginTemp.setClienteActual(c);
+                    }
+                    break;
+                }
+            }
+            odb.close();
+            return b;
         }
-        s.close();
-        return b;
     }
 
     @FXML
@@ -100,7 +124,7 @@ public class FXMLDocumentController implements Initializable {
             try {
                 login();
             } catch (IOException ex) {
-                
+
             }
 
         }
@@ -113,11 +137,11 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       txtAviso.setAlignment(Pos.CENTER);
+        txtAviso.setAlignment(Pos.CENTER);
         MoverVentanas(panel);
-       
+
     }
-    
+
     private void MoverVentanas(Pane root) {
 
         AtomicReference<Double> xOffset = new AtomicReference<>((double) 0);

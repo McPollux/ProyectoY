@@ -47,6 +47,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import org.hibernate.Session;
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.Objects;
+import org.neodatis.odb.core.query.criteria.Where;
+import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 
 /**
  *
@@ -158,7 +163,8 @@ public class ControladorCesta implements Initializable {
             }
         }
     }
-        private void MoverVentanas(Pane root) {
+
+    private void MoverVentanas(Pane root) {
 
         AtomicReference<Double> xOffset = new AtomicReference<>((double) 0);
         AtomicReference<Double> yOffset = new AtomicReference<>((double) 0);
@@ -176,29 +182,56 @@ public class ControladorCesta implements Initializable {
             stage.setY(e.getScreenY() + yOffset.get());
         });
     }
+
     public void cargarCuentas() {
         cmbPago.getItems().clear();
         cmbPago.setPromptText("Elija su cuenta");
-        Session s = NewHibernateUtil.getSession();
-        Clientes cli = (Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId());
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            Clientes cli = (Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId());
 
-        for (Cuentas i : cli.getCuentas()) {
-            cmbPago.getItems().add(i.getNumeroCuenta());
+            for (Cuentas i : cli.getCuentas()) {
+                cmbPago.getItems().add(i.getNumeroCuenta());
 
+            }
+            s.close();
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("dni", LoginTemp.getClienteActual().getDni()));
+            Objects<Clientes> cli = odb.getObjects(cq);
+
+            for (Cuentas i : cli.getFirst().getCuentas()) {
+                cmbPago.getItems().add(i.getNumeroCuenta());
+
+            }
+            odb.close();
         }
-        s.close();
     }
 
     public void cargarTarjetas() {
         cmbPago.getItems().clear();
-        Session s = NewHibernateUtil.getSession();
-        Clientes cli = (Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId());
-        cmbPago.setPromptText("Elija su tarjeta");
 
-        for (Cuentas i : cli.getCuentas()) {
-            cmbPago.getItems().add(i.getTarjeta().getNumeroTarjeta());
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            Clientes cli = (Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId());
+
+            cmbPago.setPromptText("Elija su tarjeta");
+
+            for (Cuentas i : cli.getCuentas()) {
+                cmbPago.getItems().add(i.getTarjeta().getNumeroTarjeta());
+            }
+            s.close();
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("dni", LoginTemp.getClienteActual().getDni()));
+            Objects<Clientes> cli = odb.getObjects(cq);
+            
+             cmbPago.setPromptText("Elija su tarjeta");
+
+            for (Cuentas i : cli.getFirst().getCuentas()) {
+                cmbPago.getItems().add(i.getTarjeta().getNumeroTarjeta());
+            }
         }
-        s.close();
 
     }
 
@@ -470,9 +503,10 @@ public class ControladorCesta implements Initializable {
     }
 
     public void realizarCompra() {
-        Session s = NewHibernateUtil.getSession();
         Cuentas cuenta = null;
-        boolean moroso = false;
+         boolean moroso = false;
+        if(LoginTemp.bbdd == 0){
+        Session s = NewHibernateUtil.getSession();
         if (LoginTemp.cesta != null) {
             if (cmbPago.getSelectionModel().getSelectedItem() != null) {
                 if (rbTrans.isSelected()) {
@@ -533,6 +567,74 @@ public class ControladorCesta implements Initializable {
                 lblQuejas.setText("Debes elegir una cuenta antes de realizar una compra");
             }
         }
-        s.close();
+        s.close();}
+        else{
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            if (LoginTemp.cesta != null) {
+            if (cmbPago.getSelectionModel().getSelectedItem() != null) {
+                if (rbTrans.isSelected()) {
+                    LoginTemp.cesta.setFormaPago(true);
+                    CriteriaQuery cq = new CriteriaQuery(Cuentas.class, Where.equal("numeroCuenta", cmbPago.getSelectionModel().getSelectedItem().toString()));
+                    Objects<Cuentas> c = odb.getObjects(cq);
+                    cuenta = c.getFirst();
+                    if (c.getFirst().getSaldo() < (Float.parseFloat(txtImporteTotal.getText()))) {
+                        lblQuejas.setText("No tienes saldo suficiente en tu cuenta para realizar este pedido, procedemos a borrar tu cuenta...");
+                        moroso = true;
+                    } else {
+                        cuenta.setSaldo(cuenta.getSaldo() - (Float.parseFloat(txtImporteTotal.getText())));
+                        LoginTemp.cesta.setCuenta(cuenta);
+                    }
+                } else {
+                    LoginTemp.cesta.setFormaPago(false);
+                    CriteriaQuery cq = new CriteriaQuery(Cuentas.class);
+                    Objects<Cuentas> listaCuentas = odb.getObjects(cq);
+                    for (Cuentas i : listaCuentas) {
+                        if (i.getTarjeta().getNumeroTarjeta().equals(cmbPago.getSelectionModel().getSelectedItem().toString())) {
+                            cuenta = i;
+                            break;
+                        }
+                    }
+
+                    cuenta.setSaldo(cuenta.getSaldo() - (Float.parseFloat(txtImporteTotal.getText())));
+                    LoginTemp.cesta.setCuenta(cuenta);
+                }
+                if (!moroso) {
+                    for (Pedidos i : LoginTemp.cesta.getPedidos()) {
+                        i.actualizarStock();
+                    }
+                    CriteriaQuery cq = new CriteriaQuery(Cuentas.class, Where.equal("dni", LoginTemp.getClienteActual().getDni()));
+                    Objects<Clientes> cli = odb.getObjects(cq);
+                    LoginTemp.setClienteActual((Clientes) cli.getFirst());
+                    LoginTemp.cesta.setFechaSolicitud(new Date());
+                    LoginTemp.cesta.setCliente(LoginTemp.getClienteActual());
+                    LoginTemp.getClienteActual().getCompras().add(LoginTemp.cesta);
+
+                    Compras compra = new Compras(LoginTemp.cesta.getCliente(), LoginTemp.cesta.getCuenta(), LoginTemp.cesta.isFormaPago());
+                    compra.setPrecioTotal(Float.parseFloat(txtImporteTotal.getText()));
+                    odb.store(compra);
+                    
+                    cq = new CriteriaQuery(Compras.class);
+                    Objects<Compras> l = odb.getObjects(cq);
+                    
+                    Compras[] listaCompras = (Compras[])l.toArray();//No se si va a funcionar
+                    compra = listaCompras[listaCompras.length - 1];
+                    for (Pedidos pe : LoginTemp.cesta.getPedidos()) {
+                        compra.getPedidos().add(pe);
+                        compra.setCompletado(true);
+                        pe.setCompra(compra);
+
+                        
+                        odb.store(compra);
+
+                    }
+                    limpiarCesta();
+                }
+                lblQuejas.setText("");
+            } else {
+                lblQuejas.setText("Debes elegir una cuenta antes de realizar una compra");
+            }
+        }
+            odb.close();
+        }
     }
 }

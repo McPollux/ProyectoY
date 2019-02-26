@@ -25,6 +25,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import org.hibernate.Session;
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
 
 /**
  *
@@ -146,11 +148,17 @@ public class ControladorCuenta implements Initializable {
             LoginTemp.getClienteActual().setTelefono(txtTelf.getText());
             LoginTemp.getClienteActual().setDireccion(txtDireccion.getText());
             LoginTemp.getClienteActual().setNombre(txtNombre.getText());
+            if(LoginTemp.bbdd == 0){
             Session s = NewHibernateUtil.getSession();
             s.beginTransaction();
             s.saveOrUpdate(LoginTemp.getClienteActual());
             s.getTransaction().commit();
-            s.close();
+            s.close();}
+            else{
+             ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+             odb.store(LoginTemp.getClienteActual());
+             odb.close();
+            }
             lblAdvertencia.setText("");
             noEdit();
         }

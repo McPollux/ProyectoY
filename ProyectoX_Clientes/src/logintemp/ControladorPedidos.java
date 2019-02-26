@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -40,6 +41,11 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import org.hibernate.Session;
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.Objects;
+import org.neodatis.odb.core.query.criteria.Where;
+import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 
 /**
  *
@@ -63,7 +69,7 @@ public class ControladorPedidos implements Initializable {
         if (b == -1) {
             System.exit(0);
         }
-        
+
     }
 
     @FXML
@@ -122,9 +128,18 @@ public class ControladorPedidos implements Initializable {
 
     @FXML
     public void buscar() {
-        Session s = NewHibernateUtil.getSession();
-        List<Productos> p = s.createCriteria(Productos.class).list();
-        s.close();
+        List<Productos> p = new ArrayList();
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            p = s.createCriteria(Productos.class).list();
+            s.close();
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Productos.class);
+            Objects<Productos> prod = odb.getObjects(cq);
+            p.addAll(prod);
+            odb.close();
+        }
         vbProductos.getChildren().clear();
         for (Productos productos : p) {
 
@@ -160,7 +175,7 @@ public class ControladorPedidos implements Initializable {
         name.setPrefSize(380, 42);
         name.setAlignment(Pos.CENTER);
         JFXTextArea description = new JFXTextArea(descripcion);
-        
+
         description.setFocusColor(Paint.valueOf("#fff"));
         description.setUnFocusColor(Paint.valueOf("#fff"));
         description.setPrefSize(380, 114);
@@ -194,27 +209,50 @@ public class ControladorPedidos implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         MoverVentanas(panel);
         miNombre.setText(LoginTemp.getClienteActual().getNombre());
-        Session s = NewHibernateUtil.getSession();
-        Clientes cli = (Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId());
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            Clientes cli = (Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId());
 
-        for (Compras c : cli.getCompras()) {
-            for (Pedidos p : c.getPedidos()) {
-                try {
-                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(p.getProducto().getImg()));
-                    Image imgProd = SwingFXUtils.toFXImage(img, null);
-                    ImageView imgDefinitive = new ImageView(imgProd);
+            for (Compras c : cli.getCompras()) {
+                for (Pedidos p : c.getPedidos()) {
+                    try {
+                        BufferedImage img = ImageIO.read(new ByteArrayInputStream(p.getProducto().getImg()));
+                        Image imgProd = SwingFXUtils.toFXImage(img, null);
+                        ImageView imgDefinitive = new ImageView(imgProd);
 
-                    MisPedidos(vbProductos, p.getProducto().getNombre(), p.getProducto().getDescripcion(), c.getFechaSolicitud(), p.getCantidad(), p.getPrecioTotal(),
-                            p.getProducto().getPrecio(), imgDefinitive);
-                } catch (IOException ex) {
+                        MisPedidos(vbProductos, p.getProducto().getNombre(), p.getProducto().getDescripcion(), c.getFechaSolicitud(), p.getCantidad(), p.getPrecioTotal(),
+                                p.getProducto().getPrecio(), imgDefinitive);
+                    } catch (IOException ex) {
 
+                    }
                 }
             }
+            s.close();
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("id", LoginTemp.getClienteActual().getDni()));
+            Objects<Clientes> c = odb.getObjects(cq);
+            Clientes cli = c.getFirst();
+             for (Compras cc : cli.getCompras()) {
+                for (Pedidos p : cc.getPedidos()) {
+                    try {
+                        BufferedImage img = ImageIO.read(new ByteArrayInputStream(p.getProducto().getImg()));
+                        Image imgProd = SwingFXUtils.toFXImage(img, null);
+                        ImageView imgDefinitive = new ImageView(imgProd);
+
+                        MisPedidos(vbProductos, p.getProducto().getNombre(), p.getProducto().getDescripcion(), cc.getFechaSolicitud(), p.getCantidad(), p.getPrecioTotal(),
+                                p.getProducto().getPrecio(), imgDefinitive);
+                    } catch (IOException ex) {
+
+                    }
+                }
+            }
+             odb.close();
         }
-        s.close();
 
     }
-        private void MoverVentanas(Pane root) {
+
+    private void MoverVentanas(Pane root) {
 
         AtomicReference<Double> xOffset = new AtomicReference<>((double) 0);
         AtomicReference<Double> yOffset = new AtomicReference<>((double) 0);
