@@ -9,6 +9,7 @@ import Objetos.Clientes;
 import Recursos.Windows;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +29,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -63,6 +65,14 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private Label txtAviso;
+    @FXML
+    private JFXRadioButton rbHibernate;
+
+    @FXML
+    private ToggleGroup bbdd;
+
+    @FXML
+    private JFXRadioButton rbNeodatis;
 
     @FXML
     public void registro(ActionEvent event) throws IOException {
@@ -140,6 +150,15 @@ public class FXMLDocumentController implements Initializable {
         txtAviso.setAlignment(Pos.CENTER);
         MoverVentanas(panel);
 
+    }
+
+    @FXML
+    public void BBDD() {
+        if (rbHibernate.isSelected()) {
+            LoginTemp.bbdd = 0;
+        } else {
+            LoginTemp.bbdd = 1;
+        }
     }
 
     private void MoverVentanas(Pane root) {
