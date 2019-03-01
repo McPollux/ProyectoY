@@ -6,6 +6,7 @@
 package logintemp;
 
 import Funciones.Validaciones;
+import Objetos.Clientes;
 import Recursos.Windows;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -27,6 +28,9 @@ import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.neodatis.odb.ODB;
 import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.OID;
+import org.neodatis.odb.core.query.criteria.Where;
+import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 
 /**
  *
@@ -148,17 +152,26 @@ public class ControladorCuenta implements Initializable {
             LoginTemp.getClienteActual().setTelefono(txtTelf.getText());
             LoginTemp.getClienteActual().setDireccion(txtDireccion.getText());
             LoginTemp.getClienteActual().setNombre(txtNombre.getText());
-            if(LoginTemp.bbdd == 0){
-            Session s = NewHibernateUtil.getSession();
-            s.beginTransaction();
-            s.saveOrUpdate(LoginTemp.getClienteActual());
-            s.getTransaction().commit();
-            s.close();}
-            else{
-             ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
-             odb.store(LoginTemp.getClienteActual());
-             odb.commit();
-             odb.close();
+            if (LoginTemp.bbdd == 0) {
+                Session s = NewHibernateUtil.getSession();
+                s.beginTransaction();
+                s.saveOrUpdate(LoginTemp.getClienteActual());
+                s.getTransaction().commit();
+                s.close();
+            } else {
+
+                ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+                System.out.println(LoginTemp.getClienteActual().getCorreo());
+                CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("user", LoginTemp.getClienteActual().getUser()));
+                Clientes cli = (Clientes) (odb.getObjects(cq)).getFirst();
+                System.out.println(cli.getCorreo());
+                cli.setCorreo(txtCorreo.getText());
+                cli.setTelefono(txtTelf.getText());
+                cli.setDireccion(txtDireccion.getText());
+                cli.setNombre(txtNombre.getText());
+                odb.store(cli);
+                odb.commit();
+                odb.close();
             }
             lblAdvertencia.setText("");
             noEdit();
@@ -221,7 +234,7 @@ public class ControladorCuenta implements Initializable {
         MoverVentanas(pane);
     }
 
-        private void MoverVentanas(Pane root) {
+    private void MoverVentanas(Pane root) {
 
         AtomicReference<Double> xOffset = new AtomicReference<>((double) 0);
         AtomicReference<Double> yOffset = new AtomicReference<>((double) 0);

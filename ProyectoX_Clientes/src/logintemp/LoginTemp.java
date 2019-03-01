@@ -27,7 +27,7 @@ import org.neodatis.odb.ODBServer;
  */
 public class LoginTemp extends Application {
 
-    public static int bbdd = 0;
+    public static int bbdd;
     public static Stage st;
     private static Clientes clienteActual;
     public static Compras cesta = new Compras();

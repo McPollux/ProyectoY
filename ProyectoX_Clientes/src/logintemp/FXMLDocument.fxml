@@ -55,6 +55,6 @@
             <ToggleGroup fx:id="bbdd" />
          </toggleGroup>
       </JFXRadioButton>
-      <JFXRadioButton fx:id="rbNeodatis" layoutX="44.0" layoutY="55.0" text="Neodatis" textFill="WHITE" toggleGroup="$bbdd" />
+      <JFXRadioButton fx:id="rbNeodatis" layoutX="44.0" layoutY="55.0" onAction="#BBDD" text="Neodatis" textFill="WHITE" toggleGroup="$bbdd" />
    </children>
 </Pane>

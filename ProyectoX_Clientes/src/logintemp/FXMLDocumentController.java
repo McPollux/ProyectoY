@@ -41,6 +41,7 @@ import org.hibernate.Session;
 import org.neodatis.odb.ODB;
 import org.neodatis.odb.ODBFactory;
 import org.neodatis.odb.Objects;
+import org.neodatis.odb.core.query.IQuery;
 import org.neodatis.odb.core.query.criteria.ICriterion;
 import org.neodatis.odb.core.query.criteria.Where;
 import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
@@ -109,7 +110,7 @@ public class FXMLDocumentController implements Initializable {
             return b;
         } else {
             ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
-            CriteriaQuery cq = new CriteriaQuery(Clientes.class);
+            IQuery cq = new CriteriaQuery(Clientes.class).setPolymorphic(true);
             Objects<Clientes> clientes = odb.getObjects(cq);
             boolean b = false;
             for (Clientes c : clientes) {
@@ -149,6 +150,12 @@ public class FXMLDocumentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         txtAviso.setAlignment(Pos.CENTER);
         MoverVentanas(panel);
+        if(LoginTemp.bbdd == 0){
+        rbHibernate.setSelected(true);
+        }
+        else{
+        rbNeodatis.setSelected(true);
+        }
 
     }
 
@@ -159,6 +166,7 @@ public class FXMLDocumentController implements Initializable {
         } else {
             LoginTemp.bbdd = 1;
         }
+         System.out.println(LoginTemp.bbdd);
     }
 
     private void MoverVentanas(Pane root) {
