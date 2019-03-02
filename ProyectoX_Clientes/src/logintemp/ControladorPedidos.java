@@ -230,9 +230,10 @@ public class ControladorPedidos implements Initializable {
             s.close();
         } else {
             ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
-            CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("id", LoginTemp.getClienteActual().getDni()));
+            CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("dni", LoginTemp.getClienteActual().getDni()));
             Objects<Clientes> c = odb.getObjects(cq);
             Clientes cli = c.getFirst();
+            System.out.println(cli.getCompras());
              for (Compras cc : cli.getCompras()) {
                 for (Pedidos p : cc.getPedidos()) {
                     try {

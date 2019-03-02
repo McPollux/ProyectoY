@@ -180,9 +180,18 @@ public class ControladorTienda implements Initializable {
     }
 
     public static List<Productos> listar() {
+        List<Productos> p = new ArrayList();
+        if(LoginTemp.bbdd == 0){
         Session s = NewHibernateUtil.getSession();
-        List<Productos> p = s.createCriteria(Productos.class).list();
-        s.close();
+        p = s.createCriteria(Productos.class).list();
+        s.close();}
+        else{
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Productos.class);
+            Objects<Productos> prod = odb.getObjects(cq);
+            p.addAll(prod);
+            odb.close();
+        }
         return p;
     }
 
