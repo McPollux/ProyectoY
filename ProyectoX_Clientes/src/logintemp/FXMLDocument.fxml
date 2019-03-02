@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+
+<Pane fx:id="panel" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logintemp.FXMLDocumentController">
+   <children>
+      <ImageView fitHeight="600.0" fitWidth="800.0" layoutY="1.0">
+         <image>
+            <Image url="@../fotos/fondo.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="319.0" fitWidth="294.0" layoutX="258.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../fotos/loginPiece.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="298.0" layoutY="259.0" prefHeight="25.0" prefWidth="73.0" text="Usuario" textFill="WHITE" />
+      <Label layoutX="275.0" layoutY="306.0" prefHeight="25.0" prefWidth="102.0" text="Contraseña">
+         <textFill>
+            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+               <stops>
+                  <Stop color="WHITE" />
+                  <Stop color="WHITE" offset="1.0" />
+               </stops>
+            </RadialGradient>
+         </textFill>
+      </Label>
+      <ImageView fx:id="btnlogin" accessibleRole="BUTTON" fitHeight="41.0" fitWidth="33.0" layoutX="753.0" layoutY="14.0" onMouseClicked="#salir">
+         <image>
+            <Image url="@../fotos/exit.jpg" />
+         </image>
+      </ImageView>
+      <JFXTextField fx:id="txtUser" focusColor="WHITE" layoutX="389.0" layoutY="245.0" unFocusColor="BLACK" />
+      <JFXPasswordField fx:id="txtPass" focusColor="WHITE" layoutX="389.0" layoutY="300.0" onKeyPressed="#on_enter" unFocusColor="BLACK" />
+      <JFXButton layoutX="275.0" layoutY="377.0" onAction="#login" prefHeight="31.0" prefWidth="118.0" style="-fx-background-color: white;" text="Iniciar sesión" />
+      <JFXButton layoutX="413.0" layoutY="377.0" onAction="#registro" prefHeight="31.0" prefWidth="118.0" style="-fx-background-color: white;" text="Registrarse" />
+      <Label fx:id="txtAviso" layoutX="267.0" layoutY="349.0" prefHeight="17.0" prefWidth="266.0" />
+      <ImageView fitHeight="90.0" fitWidth="227.0" layoutX="286.0" layoutY="149.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../fotos/Piplop.png" />
+         </image>
+      </ImageView>
+      <JFXRadioButton fx:id="rbHibernate" layoutX="44.0" layoutY="26.0" onAction="#BBDD" selected="true" text="Hibernate" textFill="#fffefe">
+         <toggleGroup>
+            <ToggleGroup fx:id="bbdd" />
+         </toggleGroup>
+      </JFXRadioButton>
+      <JFXRadioButton fx:id="rbNeodatis" layoutX="44.0" layoutY="55.0" onAction="#BBDD" text="Neodatis" textFill="WHITE" toggleGroup="$bbdd" />
+   </children>
+</Pane>
