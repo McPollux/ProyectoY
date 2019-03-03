@@ -114,9 +114,18 @@ public class ControladorPedidos implements Initializable {
     }
 
     public static List<Compras> listar() {
+        List<Compras> p = new ArrayList();
+        if (LoginTemp.bbdd == 0){
         Session s = NewHibernateUtil.getSession();
-        List<Compras> p = s.createCriteria(Compras.class).list();
-        s.close();
+         p = s.createCriteria(Compras.class).list();
+        s.close();}
+        else{
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Compras.class);
+            Objects<Compras> prod = odb.getObjects(cq);
+            p.addAll(prod);
+            odb.close();
+        }
         return p;
     }
 

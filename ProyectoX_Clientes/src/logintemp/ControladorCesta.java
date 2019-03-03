@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -602,7 +603,7 @@ public class ControladorCesta implements Initializable {
                         for (Pedidos i : LoginTemp.cesta.getPedidos()) {
                             i.actualizarStock();
                         }
-                        CriteriaQuery cq = new CriteriaQuery(Cuentas.class, Where.equal("dni", LoginTemp.getClienteActual().getDni()));
+                        CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("dni", LoginTemp.getClienteActual().getDni()));
                         Objects<Clientes> cli = odb.getObjects(cq);
                         LoginTemp.setClienteActual((Clientes) cli.getFirst());
                         LoginTemp.cesta.setFechaSolicitud(new Date());
@@ -612,23 +613,22 @@ public class ControladorCesta implements Initializable {
                         Clientes client = (Clientes) (odb.getObjects(cq)).getFirst();
                         Compras compra = new Compras(client, LoginTemp.cesta.getCuenta(), LoginTemp.cesta.isFormaPago());
                         compra.setPrecioTotal(Float.parseFloat(txtImporteTotal.getText()));
-                        odb.store(compra);
-                        odb.commit();
 
-                        cq = new CriteriaQuery(Compras.class);
-                        Objects<Compras> l = odb.getObjects(cq);
-
-                        Compras[] listaCompras = (Compras[]) l.toArray();//No se si va a funcionar
-                        compra = listaCompras[listaCompras.length - 1];
+                       
                         for (Pedidos pe : LoginTemp.cesta.getPedidos()) {
+                            CriteriaQuery cc = new CriteriaQuery(Productos.class, Where.equal("nombre", pe.getProducto().getNombre()));
+                            Productos p = (Productos) odb.getObjects(cc).getFirst();
+                            System.out.println(p.getNombre());
+                            pe.setProducto(p);
                             compra.getPedidos().add(pe);
                             compra.setCompletado(true);
                             pe.setCompra(compra);
 
-                            odb.store(compra);
-                            odb.commit();
+                           
 
                         }
+                         odb.store(compra);
+                            odb.commit();
                         limpiarCesta();
                     }
                     lblQuejas.setText("");
