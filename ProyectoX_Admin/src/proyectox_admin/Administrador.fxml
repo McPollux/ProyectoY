@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+
+<JFXTabPane id="tablpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@../proyectoX/css/tabpane.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectox_admin.Administrar">
+   <tabs>
+      <Tab style="-fx-pref-width: 220;" text="Productos">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <JFXTabPane id="tabpane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" side="LEFT">
+                     <tabs>
+                        <Tab style="-fx-pref-width: 250;" text="Altas">
+                           <content>
+                              <AnchorPane fx:id="paneprodaltas" minHeight="0.0" minWidth="0.0" prefHeight="230.0" prefWidth="400.0">
+                                 <children>
+                                    <Label layoutX="78.0" layoutY="61.0" prefHeight="28.0" prefWidth="99.0" text="Nombre" />
+                                    <Label layoutX="79.0" layoutY="269.0" prefHeight="28.0" prefWidth="93.0" text="Descripción" />
+                                    <JFXTextField fx:id="Altanombre" layoutX="177.0" layoutY="63.0" onKeyPressed="#on_enter" onMouseExited="#onvisAltaProducto" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6619047619047619">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <JFXTextField fx:id="Altaprecio" layoutX="177.0" layoutY="128.0" onKeyPressed="#on_enter" onMouseExited="#onvisAltaProducto" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6619047619047619">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <JFXTextField fx:id="AltaStockMin" layoutX="184.0" layoutY="186.0" onKeyPressed="#on_enter" onMouseExited="#onvisAltaProducto" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6619047619047619">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <JFXTextField fx:id="AltaStockActual" layoutX="507.0" layoutY="128.0" onKeyPressed="#on_enter" onMouseExited="#onvisAltaProducto" prefHeight="25.0" prefWidth="170.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6619047619047619">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <JFXTextField fx:id="AltaStockMax" layoutX="507.0" layoutY="186.0" onKeyPressed="#on_enter" onMouseExited="#onvisAltaProducto" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6619047619047619">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <JFXTextArea fx:id="Altadescripcion" focusColor="WHITE" layoutX="173.0" layoutY="238.0" onKeyPressed="#on_enter" onMouseExited="#onvisAltaProducto" prefHeight="89.0" prefWidth="207.0" style="-fx-border-color: #0044ff;" text="&#10;" unFocusColor="WHITE" />
+                                    <Label layoutX="395.0" layoutY="126.0" prefHeight="28.0" prefWidth="110.0" text="Stock Actual" />
+                                    <Label layoutX="78.0" layoutY="126.0" prefHeight="28.0" prefWidth="99.0" text="Precio" />
+                                    <Label layoutX="395.0" layoutY="184.0" prefHeight="28.0" prefWidth="102.0" text="Stock Máximo" />
+                                    <JFXButton layoutX="309.0" layoutY="519.0" onMouseClicked="#onDarDeAltaProducto" onTouchReleased="#onvisAltaProducto" style="-fx-border-color: blue;" text="Dar de Alta" />
+                                    <JFXButton layoutX="469.0" layoutY="270.0" onKeyPressed="#on_enter" onMouseClicked="#onElegirImagen" style="-fx-border-color: blue;" text="Imagen del Producto" />
+                                    <Label layoutX="78.0" layoutY="185.0" prefHeight="28.0" prefWidth="99.0" text="Stock Mínimo" />
+                                    <VBox fx:id="AltasProductos" layoutX="86.0" layoutY="342.0" prefHeight="143.0" prefWidth="602.0" style="-fx-border-color: black; -fx-border-radius: 25;">
+                                       <children>
+                                          <HBox prefHeight="47.0" prefWidth="578.0" stylesheets="@../proyectoX/css/boxaltas.css">
+                                             <children>
+                                                <Label alignment="CENTER" prefHeight="95.0" prefWidth="161.0" styleClass="bordebajo" />
+                                                <VBox prefHeight="43.0" prefWidth="482.0">
+                                                   <children>
+                                                      <Label alignment="CENTER" prefHeight="17.0" prefWidth="486.0" style="-fx-border-color: black; -fx-border-width: 0 0 0.5 0.5;" text="STOCK" />
+                                                      <HBox prefHeight="40.0" prefWidth="461.0">
+                                                         <children>
+                                                            <Label prefHeight="35.0" prefWidth="94.0" style="-fx-border-color: black; -fx-border-width: 0 0 1 0.5;" text="Actual:" />
+                                                            <Label prefHeight="35.0" prefWidth="71.0" />
+                                                            <Label prefHeight="35.0" prefWidth="77.0" style="-fx-border-width: 0 0 1 0.5; -fx-border-color: black;" text="Mínimo" />
+                                                            <Label prefHeight="35.0" prefWidth="95.0" style="-fx-border-width: 0 0.5  1 0; -fx-border-color: black;" />
+                                                            <Label prefHeight="35.0" prefWidth="71.0" text="Máximo" />
+                                                            <Label prefHeight="35.0" prefWidth="77.0" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </HBox>
+                                          <HBox prefHeight="99.0" prefWidth="600.0">
+                                             <children>
+                                                <Label alignment="CENTER" prefHeight="81.0" prefWidth="152.0" />
+                                                <JFXTextArea editable="false" focusColor="WHITE" prefHeight="89.0" prefWidth="200.0" unFocusColor="WHITE" />
+                                                <Label alignment="CENTER" prefHeight="79.0" prefWidth="89.0" />
+                                                <ImageView fx:id="Altaimage1" fitHeight="89.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                    <Label layoutX="395.0" layoutY="62.0" prefHeight="28.0" prefWidth="99.0" text="Proovedor" />
+                                    <JFXComboBox fx:id="altaProduProv" layoutX="506.0" layoutY="63.0" onMouseExited="#onvisAltaProducto" prefHeight="25.0" prefWidth="165.0" promptText="Seleccione proveedor">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6619047619047619">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXComboBox>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                        <Tab onSelectionChanged="#onTabModificacionesProducto" style="-fx-pref-width: 300;" text="Modificaciones">
+                           <content>
+                              <AnchorPane fx:id="paneprodmod" minHeight="0.0" minWidth="0.0" prefHeight="230.0" prefWidth="400.0">
+                                 <children>
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="233.0" layoutX="56.0" layoutY="37.0" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeMiterLimit="5.0" strokeType="OUTSIDE" style="-fx-border-width: 6;" width="655.0" />
+                                    <Label layoutX="79.0" layoutY="62.0" prefHeight="28.0" prefWidth="99.0" text="Nombre" />
+                                    <Label layoutX="79.0" layoutY="127.0" prefHeight="28.0" prefWidth="104.0" text="Stock Mínimo" />
+                                    <Label layoutX="79.0" layoutY="198.0" prefHeight="28.0" prefWidth="95.0" text="Descripción" />
+                                    <JFXTextField fx:id="modNombre" layoutX="184.0" layoutY="63.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="176.0">
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.680952380952381">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor>
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor></JFXTextField>
+                                    <JFXTextField fx:id="modStockMax" layoutX="507.0" layoutY="186.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.680952380952381">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <JFXTextField fx:id="modStockAct" layoutX="507.0" layoutY="128.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="#0044ff" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.680952380952381">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <Label layoutX="395.0" layoutY="126.0" prefHeight="28.0" prefWidth="106.0" text="Stock Actual" />
+                                    <Label layoutX="395.0" layoutY="62.0" prefHeight="28.0" prefWidth="99.0" text="Precio" />
+                                    <JFXTextField fx:id="modPrecio" layoutX="507.0" layoutY="63.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="174.0">
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.680952380952381">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor>
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor></JFXTextField>
+                                    <Label layoutX="395.0" layoutY="184.0" prefHeight="28.0" prefWidth="113.0" text="Stock Máximo" />
+                                    <JFXTextField fx:id="modStockMin" layoutX="178.0" layoutY="129.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="181.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.680952380952381">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <JFXButton layoutX="309.0" layoutY="519.0" onMouseClicked="#on_modificar_productos" style="-fx-border-color: blue;" text="Modificar" />
+                                    <JFXButton fx:id="modImagen" layoutX="460.0" layoutY="233.0" onKeyPressed="#on_enter" onMouseClicked="#onElegirImagen" style="-fx-border-color: blue;" text="Imagen del Producto" />
+                                    <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="54.0" layoutY="319.0" prefHeight="157.0" prefWidth="664.0">
+                                       <content>
+                                          <VBox fx:id="vboxModificarltaProducto" prefHeight="163.0" prefWidth="662.0" style="-fx-border-color: black;">
+                                             <stylesheets>
+                                                <URL value="@../proyectoX/css/voxmodproductos.css" />
+                                                <URL value="@../proyectoX/css/hbox.css" />
+                                             </stylesheets></VBox>
+                                       </content>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </ScrollPane>
+                                    <Label alignment="CENTER" layoutX="55.0" layoutY="302.0" prefHeight="17.0" prefWidth="220.0" style="-fx-border-color: black;" text="ID" textAlignment="CENTER" />
+                                    <Label alignment="CENTER" layoutX="492.0" layoutY="302.0" prefHeight="17.0" prefWidth="225.0" style="-fx-border-color: black;" text="Stock Actual" />
+                                    <Label alignment="CENTER" layoutX="274.0" layoutY="302.0" prefHeight="19.0" prefWidth="219.0" style="-fx-border-color: black;" text="Nombre" />
+                                    <JFXTextArea fx:id="moddescrip" focusColor="WHITE" layoutX="176.0" layoutY="174.0" onKeyPressed="#on_enter" prefHeight="75.0" prefWidth="178.0" style="-fx-border-color: blue;" text="&#10;" unFocusColor="WHITE" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                     </tabs>
+                  </JFXTabPane>
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+      <Tab style="-fx-pref-width: 220;" text="Proveedores">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <JFXTabPane id="tabpane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="565.0" prefWidth="800.0" side="LEFT">
+                     <tabs>
+                        <Tab style="-fx-pref-width: 180;" text="Altas">
+                           <content>
+                              <AnchorPane fx:id="paneprovaltas" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="206.0" layoutY="86.0" prefHeight="28.0" prefWidth="99.0" text="Cif" />
+                                    <Label layoutX="206.0" layoutY="279.0" prefHeight="28.0" prefWidth="99.0" text="Email" />
+                                    <Label layoutX="206.0" layoutY="150.0" prefHeight="28.0" prefWidth="99.0" text="Dirección" />
+                                    <Label layoutX="206.0" layoutY="215.0" prefHeight="28.0" prefWidth="99.0" text="Telefono" />
+                                    <JFXTextField fx:id="cifAlta" layoutX="317.0" layoutY="86.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0">
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.680952380952381">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor>
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor></JFXTextField>
+                                    <JFXTextField fx:id="direccionalta" layoutX="317.0" layoutY="150.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.680952380952381">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <JFXTextField fx:id="telefonoAlta" layoutX="317.0" layoutY="215.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.680952380952381">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <JFXTextField fx:id="emailAlta" layoutX="317.0" layoutY="271.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.680952380952381">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <JFXButton layoutX="292.0" layoutY="396.0" onMouseClicked="#onAltaProovedor" prefHeight="35.0" prefWidth="104.0" style="-fx-border-color: blue;" text="Dar de Alta" />
+                                    <Label fx:id="Ealprocif" layoutX="485.0" layoutY="90.0" textFill="RED" visible="false" />
+                                    <Label fx:id="Ealprodir" layoutX="485.0" layoutY="154.0" text="Este campo esta vacio" textFill="RED" visible="false" />
+                                    <Label fx:id="Ealprotlf" layoutX="485.0" layoutY="219.0" textFill="RED" visible="false" />
+                                    <Label fx:id="Ealpromail" layoutX="485.0" layoutY="275.0" textFill="RED" visible="false" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                        <Tab onSelectionChanged="#on_provmod" style="-fx-pref-width: 180;" text="Modificaciones">
+                           <content>
+                              <AnchorPane fx:id="paneprovmod" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="140.0" layoutX="98.0" layoutY="54.0" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeMiterLimit="5.0" strokeType="OUTSIDE" style="-fx-border-width: 6;" width="554.0" />
+                                    <Label layoutX="132.0" layoutY="70.0" prefHeight="28.0" prefWidth="41.0" text="Cif" />
+                                    <Label layoutX="125.0" layoutY="134.0" prefHeight="28.0" prefWidth="48.0" text="Email" />
+                                    <Label layoutX="393.0" layoutY="65.0" prefHeight="28.0" prefWidth="110.0" text="Dirección" />
+                                    <Label layoutX="393.0" layoutY="134.0" prefHeight="28.0" prefWidth="111.0" text="Telefono" />
+                                    <JFXTextField fx:id="modProvCif" editable="false" layoutX="173.0" layoutY="66.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0">
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor>
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.680952380952381">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor></JFXTextField>
+                                    <JFXTextField fx:id="modProvTlf" layoutX="462.0" layoutY="134.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.680952380952381">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor></JFXTextField>
+                                    <JFXTextField fx:id="modProvMail" layoutX="173.0" layoutY="134.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0" unFocusColor="#0044ff" />
+                                    <JFXTextField fx:id="modProvDir" focusColor="#0044ff" layoutX="462.0" layoutY="66.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.680952380952381">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor></JFXTextField>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="54.0" layoutY="220.0" prefHeight="239.0" prefWidth="642.0">
+                                       <content>
+                                          <VBox fx:id="vboxModificacionesProveedores" prefHeight="154.0" prefWidth="664.0" style="-fx-border-color: black;" stylesheets="@../proyectoX/css/voxmodproductos.css" />
+                                       </content>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </ScrollPane>
+                                    <JFXButton layoutX="322.0" layoutY="487.0" onMouseClicked="#onModificarProovedor" prefHeight="35.0" prefWidth="120.0" style="-fx-border-color: blue;" text="Modificar" />
+                                    <Label alignment="CENTER" layoutX="55.0" layoutY="203.0" prefHeight="19.0" prefWidth="58.0" style="-fx-border-color: BLACK;" text="CIF" />
+                                    <Label alignment="CENTER" layoutX="472.0" layoutY="203.0" prefHeight="19.0" prefWidth="223.0" style="-fx-border-color: BLACK;" text="Email" />
+                                    <Label alignment="CENTER" layoutX="376.0" layoutY="203.0" prefHeight="19.0" prefWidth="97.0" style="-fx-border-color: BLACK;" text="Telefono" />
+                                    <Label alignment="CENTER" layoutX="112.0" layoutY="203.0" prefHeight="19.0" prefWidth="265.0" style="-fx-border-color: BLACK;" text="Dirección" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                        <Tab onSelectionChanged="#on_probajas" style="-fx-pref-width: 180;" text="Bajas">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="52.0" layoutY="85.0" prefHeight="394.0" prefWidth="643.0">
+                                       <content>
+                                          <VBox fx:id="vboxBajasProveedores" prefHeight="366.0" prefWidth="641.0" style="-fx-border-color: black;" stylesheets="@../proyectoX/css/voxmodproductos.css" />
+                                       </content>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </ScrollPane>
+                                    <Label alignment="CENTER" layoutX="52.0" layoutY="68.0" prefHeight="19.0" prefWidth="59.0" style="-fx-border-color: BLACK;" text="CIF" />
+                                    <Label alignment="CENTER" layoutX="471.0" layoutY="68.0" prefHeight="19.0" prefWidth="223.0" style="-fx-border-color: BLACK;" text="Email" />
+                                    <Label alignment="CENTER" layoutX="373.0" layoutY="68.0" prefHeight="19.0" prefWidth="99.0" style="-fx-border-color: BLACK;" text="Telefono" />
+                                    <Label alignment="CENTER" layoutX="110.0" layoutY="68.0" prefHeight="19.0" prefWidth="264.0" style="-fx-border-color: BLACK;" text="Dirección" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                     </tabs>
+                  </JFXTabPane>
+               </children></AnchorPane>
+        </content>
+      </Tab>
+      <Tab fx:id="bajascli" style="-fx-pref-width: 220;" text="Clientes">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <JFXTabPane id="tabpane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="565.0" prefWidth="800.0" side="LEFT">
+                     <tabs>
+                        <Tab fx:id="bajcli" onSelectionChanged="#onTab_BajasClientes" style="-fx-pref-width: 250;" text="Bajas">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="230.0" prefWidth="400.0">
+                                 <children>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="52.0" layoutY="77.0" prefHeight="403.0" prefWidth="663.0">
+                                       <content>
+                                          <VBox fx:id="vboxBajasClientes" prefHeight="406.0" prefWidth="661.0" style="-fx-border-color: black;" stylesheets="@../proyectoX/css/voxmodproductos.css" />
+                                       </content>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </ScrollPane>
+                                    <Label alignment="CENTER" layoutX="53.0" layoutY="60.0" prefHeight="19.0" prefWidth="50.0" style="-fx-border-color: black;" text="ID" />
+                                    <Label alignment="CENTER" layoutX="201.0" layoutY="60.0" prefHeight="19.0" prefWidth="144.0" style="-fx-border-color: black;" text="Nombre" />
+                                    <Label alignment="CENTER" layoutX="103.0" layoutY="60.0" prefHeight="19.0" prefWidth="98.0" style="-fx-border-color: black;" text="DNI" />
+                                    <Label alignment="CENTER" layoutX="345.0" layoutY="60.0" prefHeight="19.0" prefWidth="257.0" style="-fx-border-color: black;" text="Dirección" />
+                                    <Label alignment="CENTER" layoutX="602.0" layoutY="60.0" prefHeight="19.0" prefWidth="112.0" style="-fx-border-color: black;" text="Telefono" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                        <Tab fx:id="modcli" onSelectionChanged="#onTab_BajasClientes" style="-fx-pref-width: 300;" text="Modificaciones">
+                           <content>
+                              <AnchorPane fx:id="paneclientesmod" minHeight="0.0" minWidth="0.0" prefHeight="230.0" prefWidth="400.0">
+                                 <children>
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="158.0" layoutX="56.0" layoutY="37.0" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeMiterLimit="5.0" strokeType="OUTSIDE" style="-fx-border-width: 6;" width="633.0" />
+                                    <Label layoutX="395.0" layoutY="60.0" prefHeight="28.0" prefWidth="99.0" text="Dirección" />
+                                    <Label layoutX="78.0" layoutY="59.0" prefHeight="28.0" prefWidth="99.0" text="Nombre" />
+                                    <JFXTextField fx:id="modCliNombre" focusColor="#0044ff" layoutX="184.0" layoutY="62.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6619047619047619">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor></JFXTextField>
+                                    <JFXTextField fx:id="modCliDirec" layoutX="507.0" layoutY="62.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6619047619047619">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <JFXTextField fx:id="modCliMail" layoutX="507.0" layoutY="128.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6619047619047619">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6619047619047619">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <Label layoutX="395.0" layoutY="126.0" prefHeight="28.0" prefWidth="99.0" text="Email" />
+                                    <Label layoutX="78.0" layoutY="126.0" prefHeight="28.0" prefWidth="99.0" text="Telefono" />
+                                    <JFXTextField fx:id="modCliTlf" layoutX="184.0" layoutY="129.0" onKeyPressed="#on_enter" prefHeight="25.0" prefWidth="162.0">
+                                       <unFocusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6619047619047619">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </unFocusColor>
+                                       <focusColor>
+                                          <LinearGradient endX="1.0" endY="1.0" startX="0.6428571428571429">
+                                             <stops>
+                                                <Stop color="#0044ff" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </focusColor></JFXTextField>
+                                    <JFXButton layoutX="312.0" layoutY="233.0" onMouseClicked="#onModificarCliente" prefHeight="33.0" prefWidth="104.0" style="-fx-border-color: blue;" text="Modificar" />
+                                    <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="50.0" layoutY="319.0" prefHeight="212.0" prefWidth="662.0">
+                                       <content>
+                                          <VBox fx:id="vboxModificacionesClientes" prefHeight="210.0" prefWidth="669.0" style="-fx-border-color: black;" stylesheets="@../proyectoX/css/voxmodproductos.css" />
+                                       </content>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </ScrollPane>
+                                    <Label alignment="CENTER" layoutX="50.0" layoutY="302.0" prefHeight="19.0" prefWidth="50.0" style="-fx-border-color: black;" text="ID" />
+                                    <Label alignment="CENTER" layoutX="197.0" layoutY="302.0" prefHeight="19.0" prefWidth="145.0" style="-fx-border-color: black;" text="Nombre" />
+                                    <Label alignment="CENTER" layoutX="99.0" layoutY="302.0" prefHeight="19.0" prefWidth="99.0" style="-fx-border-color: black;" text="DNI" />
+                                    <Label alignment="CENTER" layoutX="341.0" layoutY="302.0" prefHeight="19.0" prefWidth="258.0" style="-fx-border-color: black;" text="Dirección" />
+                                    <Label alignment="CENTER" layoutX="598.0" layoutY="302.0" prefHeight="19.0" prefWidth="113.0" style="-fx-border-color: black;" text="Telefono" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                     </tabs>
+                  </JFXTabPane>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab onSelectionChanged="#on_salir" style="-fx-pref-width: 130;" styleClass="casa" text="Salir" />
+   </tabs>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</JFXTabPane>
