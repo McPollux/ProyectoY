@@ -38,6 +38,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -213,7 +215,7 @@ public class ControladorTienda implements Initializable {
         vbProductos.getChildren().clear();
         for (Productos productos : p) {
 
-            if (productos.getNombre().matches(".*" + txtBuscar.getText() + ".*")) {
+            if (productos.getNombre().toLowerCase().matches(".*" + txtBuscar.getText().toLowerCase() + ".*")) {
                 try {
                     BufferedImage img = ImageIO.read(new ByteArrayInputStream(productos.getImg()));
                     Image imgProd = SwingFXUtils.toFXImage(img, null);
@@ -222,6 +224,19 @@ public class ControladorTienda implements Initializable {
                 } catch (IOException ex) {
 
                 }
+            }
+
+        }
+    }
+    @FXML
+    public void on_enter(Event evt) {
+        KeyEvent e = (KeyEvent) evt;
+        if (e.getCode() == KeyCode.ENTER) {
+
+            try {
+                buscar();
+            } catch (Exception ex) {
+
             }
 
         }
