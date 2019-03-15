@@ -23,6 +23,7 @@ public class Bajas {
             if(ProyectoX_Admin.gestor == 0){
                 SesionOperation.eliminar(p);
             }else{
+                System.out.println(p.getCif());
                 SesionOperation.eliminarNeo(p);
             }
             

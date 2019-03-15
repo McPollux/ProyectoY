@@ -69,12 +69,14 @@ public class RegistraryLogear implements Initializable {
         @FXML
     void neoclicked(MouseEvent event) {
     System.out.println("neodatis selected");
+
     ProyectoX_Admin.gestor=1;
     }
     
              @FXML
     void hiberclicked(MouseEvent event) {
          System.out.println("hibernate selected");
+     
              ProyectoX_Admin.gestor=0;
     }
     
@@ -141,6 +143,10 @@ public class RegistraryLogear implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        if(neobuton!=null){
+        if(ProyectoX_Admin.gestor==1){
+        neobuton.setSelected(true);
+        }else{hiberbuton.setSelected(true);}}
         // TODO
     }    
     

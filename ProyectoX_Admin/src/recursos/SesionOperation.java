@@ -58,7 +58,7 @@ public class SesionOperation {
     //método para dar de baja un objeto en Neodatis
     public static void eliminarNeo(Object o) {
         ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
-
+         
         odb.delete(o);
 
         odb.commit();
