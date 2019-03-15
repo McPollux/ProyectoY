@@ -156,7 +156,7 @@ public class ControladorPedidos implements Initializable {
         vbProductos.getChildren().clear();
         for (Compras cc : cli.getCompras()) {
                 for (Pedidos p : cc.getPedidos()) {
-                    if (p.getNombre.toLowerCase().matches(".*" + txtBuscar.getText().toLowerCase() + ".*")) {
+                    if (p.getProducto().getNombre().toLowerCase().matches(".*" + txtBuscar.getText().toLowerCase() + ".*")) {
                     try {
                         BufferedImage img = ImageIO.read(new ByteArrayInputStream(p.getProducto().getImg()));
                         Image imgProd = SwingFXUtils.toFXImage(img, null);
@@ -272,7 +272,6 @@ public class ControladorPedidos implements Initializable {
             CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("dni", LoginTemp.getClienteActual().getDni()));
             Objects<Clientes> c = odb.getObjects(cq);
             Clientes cli = c.getFirst();
-            System.out.println(cli.getCompras());
              for (Compras cc : cli.getCompras()) {
                 for (Pedidos p : cc.getPedidos()) {
                     try {

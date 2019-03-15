@@ -438,7 +438,6 @@ public class ControladorCesta implements Initializable {
                                 break;
                             }
                         }
-                        System.out.println(pedido.getCantidad());
                         if (pedido == null) {
                             System.out.println("Algo ha ido muy mal");
                         } else {
@@ -618,7 +617,6 @@ public class ControladorCesta implements Initializable {
                         for (Pedidos pe : LoginTemp.cesta.getPedidos()) {
                             CriteriaQuery cc = new CriteriaQuery(Productos.class, Where.equal("nombre", pe.getProducto().getNombre()));
                             Productos p = (Productos) odb.getObjects(cc).getFirst();
-                            System.out.println(p.getNombre());
                             pe.setProducto(p);
                             compra.getPedidos().add(pe);
                             compra.setCompletado(true);

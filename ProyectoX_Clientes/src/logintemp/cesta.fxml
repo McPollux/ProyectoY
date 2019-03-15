@@ -38,7 +38,7 @@
       <JFXComboBox fx:id="cmbPago" layoutX="256.0" layoutY="175.0" prefHeight="31.0" prefWidth="276.0" promptText="Elija su cuenta" />
       <JFXButton layoutX="581.0" layoutY="354.0" onMouseClicked="#limpiarCesta" prefHeight="31.0" prefWidth="205.0" style="-fx-background-color: white;" text="Cancelar Compra" />
       <Label fx:id="lblQuejas" layoutX="15.0" layoutY="565.0" prefHeight="21.0" prefWidth="304.0" />
-      <Label fx:id="lblTotal" layoutX="581.0" layoutY="462.0" prefHeight="21.0" prefWidth="123.0" text="El importe total es de:" />
+      <Label fx:id="lblTotal" layoutX="581.0" layoutY="462.0" prefHeight="21.0" prefWidth="55.0" text="TOTAL:" />
       <MenuBar layoutY="-2.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0" prefWidth="800.0" style="-fx-background-color: #7bccaa;">
          <menus>
             <Menu mnemonicParsing="false" text="Salir">
@@ -71,7 +71,6 @@
             <VBox fx:id="vbProductos" prefHeight="316.0" prefWidth="521.0" />
          </content>
       </ScrollPane>
-      <Label fx:id="txtImporteTotal" layoutX="704.0" layoutY="464.0" />
-      <Label layoutX="741.0" layoutY="464.0" text="€" />
+      <Label fx:id="txtImporteTotal" layoutX="631.0" layoutY="462.0" prefHeight="21.0" prefWidth="106.0" />
    </children>
 </Pane>

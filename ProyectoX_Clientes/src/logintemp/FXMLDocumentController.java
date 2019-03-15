@@ -166,7 +166,6 @@ public class FXMLDocumentController implements Initializable {
         } else {
             LoginTemp.bbdd = 1;
         }
-         System.out.println(LoginTemp.bbdd);
     }
 
     private void MoverVentanas(Pane root) {

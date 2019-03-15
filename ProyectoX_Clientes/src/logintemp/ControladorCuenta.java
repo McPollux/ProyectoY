@@ -161,10 +161,8 @@ public class ControladorCuenta implements Initializable {
             } else {
 
                 ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
-                System.out.println(LoginTemp.getClienteActual().getCorreo());
                 CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("user", LoginTemp.getClienteActual().getUser()));
                 Clientes cli = (Clientes) (odb.getObjects(cq)).getFirst();
-                System.out.println(cli.getCorreo());
                 cli.setCorreo(txtCorreo.getText());
                 cli.setTelefono(txtTelf.getText());
                 cli.setDireccion(txtDireccion.getText());

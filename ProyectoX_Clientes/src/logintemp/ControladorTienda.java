@@ -128,18 +128,6 @@ public class ControladorTienda implements Initializable {
         win.cerrarVentana(txtBuscar);
     }
 
-    @FXML
-    public void productoJaj() {
-        /*vbProductos.setSpacing(30);
-        ImageView img = new ImageView("/fotos/ImagenFalsa.jpg");
-        ins.AnhadirProducto(vbProductos, "Manzanas", "pues est�n ricas bb me encantan tus bideos vegeta\n t kiero bb",
-                1500, img);*/
-        //vbProductos.getChildren().clear();
-
-        for (Pedidos object : LoginTemp.cesta.getPedidos()) {
-            System.out.println(object.getCantidad() + "  " + object.getProducto().getNombre());
-        }
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -301,10 +289,10 @@ public class ControladorTienda implements Initializable {
     public void volverSum(ImageView imgReal) {
         Image img = new Image("/fotos/comprobado.png");
         imgReal.setImage(img);
+        imgReal.setDisable(true);
     }
 
     public void anhadirCesta(String nombre, HBox columna, ImageView imgPlus) {
-        System.out.println("Llegó a añadir cesta");
         List<Productos> p = new ArrayList<>();
         byte b = 0;
         if (LoginTemp.bbdd == 0) {
