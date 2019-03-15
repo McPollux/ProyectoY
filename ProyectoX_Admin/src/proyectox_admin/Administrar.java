@@ -6,6 +6,7 @@
 package proyectox_admin;
 
 import Objetos.Clientes;
+import Objetos.Gestores;
 import Objetos.Productos;
 import Objetos.Proveedores;
 import com.jfoenix.controls.JFXComboBox;
@@ -38,6 +39,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import org.hibernate.Session;
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.Objects;
+import org.neodatis.odb.core.query.criteria.Where;
+import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 import recursos.Busquedas;
 import recursos.Resize;
 
@@ -250,22 +256,34 @@ public class Administrar implements Initializable {
     private void onelegirproducto(Event evt) throws IOException {
         HBox h = (HBox) evt.getSource();
         String a = (((Label) h.getChildren().get(0)).getText());
-        Session s = NewHibernateUtil.getSession();
-        System.out.println(a);
-        Productos p = (Productos) s.get(Productos.class, Integer.valueOf(a));
-        auxprod = p;
 
-        modNombre.setText(p.getNombre());
-        System.out.println(p.getDescripcion());
-        moddescrip.setText(p.getDescripcion());
-        modStockMin.setText(String.valueOf(p.getStockMin()));
-        modStockAct.setText(String.valueOf(p.getStockActual()));
-        modStockMax.setText(String.valueOf(p.getStockMax()));
-        modPrecio.setText(String.valueOf(p.getPrecio()));
-        auximg = p.getImg();
+
+            if(ProyectoX_Admin.gestor==0){
+              Session s = NewHibernateUtil.getSession();
+            Productos p = (Productos) s.get(Productos.class, Integer.valueOf(a));
+            auxprod = p;
+            s.close();
+            }else{
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            Objects<Productos> prod = odb.getObjects(new CriteriaQuery(Productos.class, Where.equal("id", Integer.valueOf(a))));
+            Productos p = prod.getFirst();
+            auxprod = p;               
+                
+            }
+        
+        
+        
+        modNombre.setText(auxprod.getNombre());
+        System.out.println(auxprod.getDescripcion());
+        moddescrip.setText(auxprod.getDescripcion());
+        modStockMin.setText(String.valueOf(auxprod.getStockMin()));
+        modStockAct.setText(String.valueOf(auxprod.getStockActual()));
+        modStockMax.setText(String.valueOf(auxprod.getStockMax()));
+        modPrecio.setText(String.valueOf(auxprod.getPrecio()));
+        auximg = auxprod.getImg();
 
         h.setStyle("-fx-background-color: slateblue; ");
-        s.close();
+     
     }
 
     @FXML
@@ -510,20 +528,31 @@ public class Administrar implements Initializable {
     @FXML
     private void onelegirprovedor(Event evt, int op) throws IOException {
         HBox h = (HBox) evt.getSource();
-        String a = (((Label) h.getChildren().get(0)).getText());
-        Session s = NewHibernateUtil.getSession();
-        Proveedores p = (Proveedores) s.get(Proveedores.class, a);
-        auxprov = p;
-        h.setStyle("-fx-background-color: slateblue; ");
-        s.close();
+        String a = (((Label) h.getChildren().get(0)).getText());      
+                    if(ProyectoX_Admin.gestor==0){
+              Session s = NewHibernateUtil.getSession();
+            Proveedores p = (Proveedores) s.get(Proveedores.class, a);
+            auxprov = p;
+            s.close();
+            }else{
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            Objects<Proveedores> prov = odb.getObjects(new CriteriaQuery(Proveedores.class, Where.equal("cif", a)));
+            Proveedores p = prov.getFirst();
+            auxprov = p;               
+                
+            }
+              
+                
+                h.setStyle("-fx-background-color: slateblue; ");
+        
         if (op == 1) {
-            modProvCif.setText(String.valueOf(p.getCif()));
-            modProvDir.setText(p.getDireccion());
-            modProvMail.setText(String.valueOf(p.getCorreo()));
-            modProvTlf.setText(String.valueOf(p.getTelefono()));
+            modProvCif.setText(String.valueOf(auxprov.getCif()));
+            modProvDir.setText(auxprov.getDireccion());
+            modProvMail.setText(String.valueOf(auxprov.getCorreo()));
+            modProvTlf.setText(String.valueOf(auxprov.getTelefono()));
 
         } else {
-            BajasProveedores(evt, p);
+            BajasProveedores(evt, auxprov);
         }
 
     }
