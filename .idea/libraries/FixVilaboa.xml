@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="FixVilaboa">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/FixVilaboa_library/dist/FixVilaboa.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
