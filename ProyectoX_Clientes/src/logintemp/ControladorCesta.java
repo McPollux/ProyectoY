@@ -578,7 +578,7 @@ public class ControladorCesta implements Initializable {
                         Objects<Cuentas> c = odb.getObjects(cq);
                         cuenta = c.getFirst();
                         if (c.getFirst().getSaldo() < (Float.parseFloat(txtImporteTotal.getText()))) {
-                            lblQuejas.setText("No tienes saldo suficiente en tu cuenta para realizar este pedido, procedemos a borrar tu cuenta...");
+                            lblQuejas.setText("No tienes saldo suficiente en tu cuenta para realizar este pedido");
                             moroso = true;
                         } else {
                             cuenta.setSaldo(cuenta.getSaldo() - (Float.parseFloat(txtImporteTotal.getText())));
