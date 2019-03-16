@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Pedidos implements Serializable, PropertyChangeListener {
+public class Pedidos implements Serializable {
 
     private int id;
     private int cantidad;
@@ -76,20 +76,5 @@ public class Pedidos implements Serializable, PropertyChangeListener {
         producto.setStockActual(producto.getStockActual()-cantidad);
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        Date fecha = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        File f = new File("fichero.txt");
-        try {
-            BufferedWriter bw= new BufferedWriter(new FileWriter(f));
-            bw.write("Se ha realizado una actualizacion de stock del producto \""+producto.getNombre()+"\" en la fecha: "+sdf.format(fecha));
-            bw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Pedidos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        producto.setStockActual(producto.getStockMax());
-    }
 
 }

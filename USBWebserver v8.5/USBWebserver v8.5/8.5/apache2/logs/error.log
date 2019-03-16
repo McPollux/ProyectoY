@@ -1,0 +1,8 @@
+[Sat Mar 16 17:27:13 2019] [notice] Apache/2.2.21 (Win32) PHP/5.3.9 configured -- resuming normal operations
+[Sat Mar 16 17:27:13 2019] [notice] Server built: Sep 10 2011 11:34:11
+[Sat Mar 16 17:27:13 2019] [notice] Parent: Created child process 7264
+[Sat Mar 16 17:27:14 2019] [notice] Child 7264: Child process is running
+[Sat Mar 16 17:27:14 2019] [notice] Child 7264: Acquired the start mutex.
+[Sat Mar 16 17:27:14 2019] [notice] Child 7264: Starting 64 worker threads.
+[Sat Mar 16 17:27:14 2019] [notice] Child 7264: Starting thread to listen on port 8081.
+[Sat Mar 16 17:27:14 2019] [notice] Child 7264: Starting thread to listen on port 8081.

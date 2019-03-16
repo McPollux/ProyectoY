@@ -58,7 +58,7 @@ public class ProyectoX_Admin extends Application {
         }
 
         ODBServer server = ODBFactory.openServer(8000);
-        server.addBase("proyectojjcv", "proyectojjcv.db");
+        server.addBase("proyectojjcv", "../proyectojjcv.db");
         server.startServer(true);
 
         launch(args);

@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -47,6 +48,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import org.hibernate.Session;
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.Objects;
+import org.neodatis.odb.core.query.criteria.Where;
+import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 
 /**
  *
@@ -158,7 +164,8 @@ public class ControladorCesta implements Initializable {
             }
         }
     }
-        private void MoverVentanas(Pane root) {
+
+    private void MoverVentanas(Pane root) {
 
         AtomicReference<Double> xOffset = new AtomicReference<>((double) 0);
         AtomicReference<Double> yOffset = new AtomicReference<>((double) 0);
@@ -176,29 +183,56 @@ public class ControladorCesta implements Initializable {
             stage.setY(e.getScreenY() + yOffset.get());
         });
     }
+
     public void cargarCuentas() {
         cmbPago.getItems().clear();
         cmbPago.setPromptText("Elija su cuenta");
-        Session s = NewHibernateUtil.getSession();
-        Clientes cli = (Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId());
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            Clientes cli = (Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId());
 
-        for (Cuentas i : cli.getCuentas()) {
-            cmbPago.getItems().add(i.getNumeroCuenta());
+            for (Cuentas i : cli.getCuentas()) {
+                cmbPago.getItems().add(i.getNumeroCuenta());
 
+            }
+            s.close();
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("dni", LoginTemp.getClienteActual().getDni()));
+            Objects<Clientes> cli = odb.getObjects(cq);
+
+            for (Cuentas i : cli.getFirst().getCuentas()) {
+                cmbPago.getItems().add(i.getNumeroCuenta());
+
+            }
+            odb.close();
         }
-        s.close();
     }
 
     public void cargarTarjetas() {
         cmbPago.getItems().clear();
-        Session s = NewHibernateUtil.getSession();
-        Clientes cli = (Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId());
-        cmbPago.setPromptText("Elija su tarjeta");
 
-        for (Cuentas i : cli.getCuentas()) {
-            cmbPago.getItems().add(i.getTarjeta().getNumeroTarjeta());
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            Clientes cli = (Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId());
+
+            cmbPago.setPromptText("Elija su tarjeta");
+
+            for (Cuentas i : cli.getCuentas()) {
+                cmbPago.getItems().add(i.getTarjeta().getNumeroTarjeta());
+            }
+            s.close();
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("dni", LoginTemp.getClienteActual().getDni()));
+            Objects<Clientes> cli = odb.getObjects(cq);
+
+            cmbPago.setPromptText("Elija su tarjeta");
+
+            for (Cuentas i : cli.getFirst().getCuentas()) {
+                cmbPago.getItems().add(i.getTarjeta().getNumeroTarjeta());
+            }
         }
-        s.close();
 
     }
 
@@ -332,10 +366,13 @@ public class ControladorCesta implements Initializable {
                 totalPrice.setText(String.valueOf(nuevoPrecioTotal));
                 pedido.setCantidad(pedido.getCantidad() + 1);
                 pedido.setPrecioTotal(pedido.getPrecioTotal() + pedido.getProducto().getPrecio());
+                
+                actualizarPrecioTotal();
+                txtImporteTotal.setText(String.valueOf(LoginTemp.cesta.getPrecioTotal()));
             } else {
                 lblQuejas.setText("No hay suficientes existencias del producto " + nombre + " para aumentar el pedido");
             }
-            txtImporteTotal.setText(String.valueOf(Float.parseFloat(txtImporteTotal.getText()) + Float.parseFloat(price.getText())));
+            
         }
     }
 
@@ -379,7 +416,8 @@ public class ControladorCesta implements Initializable {
                 pedido.setCantidad(pedido.getCantidad() - 1);
                 pedido.setPrecioTotal(pedido.getPrecioTotal() - pedido.getProducto().getPrecio());
 
-                txtImporteTotal.setText(String.valueOf(Float.parseFloat(txtImporteTotal.getText()) - Float.parseFloat(price.getText())));
+                actualizarPrecioTotal();
+                txtImporteTotal.setText(String.valueOf(LoginTemp.cesta.getPrecioTotal()));
             }
         } else {
             lblQuejas.setText("Mínimo un producto");
@@ -404,7 +442,6 @@ public class ControladorCesta implements Initializable {
                                 break;
                             }
                         }
-                        System.out.println(pedido.getCantidad());
                         if (pedido == null) {
                             System.out.println("Algo ha ido muy mal");
                         } else {
@@ -417,8 +454,13 @@ public class ControladorCesta implements Initializable {
                             } else {
                                 lblQuejas.setText("No hay suficientes existencias del producto " + nombre + " para aumentar el pedido");
                                 txtUni.setText(String.valueOf(pedido.getProducto().getStockActual()));
+                                nuevoPrecioTotal = Float.parseFloat(txtUni.getText()) * Float.parseFloat(price.getText());
+                                totalPrice.setText(String.valueOf(nuevoPrecioTotal));
+                                pedido.setCantidad(Integer.parseInt(txtUni.getText()));
+                                pedido.setPrecioTotal(pedido.getCantidad() * pedido.getProducto().getPrecio());
                             }
-                            txtImporteTotal.setText(String.valueOf(Float.parseFloat(txtUni.getText()) * Float.parseFloat(price.getText())));
+                            actualizarPrecioTotal();
+                            txtImporteTotal.setText(String.valueOf(LoginTemp.cesta.getPrecioTotal()));
                         }
                     }
                 }
@@ -435,6 +477,8 @@ public class ControladorCesta implements Initializable {
                     totalPrice.setText(String.valueOf(nuevoPrecioTotal));
                     pedido.setCantidad(Integer.parseInt(txtUni.getText()));
                     pedido.setPrecioTotal(pedido.getProducto().getPrecio());
+                    
+                    actualizarPrecioTotal();
                     txtImporteTotal.setText(String.valueOf(Float.parseFloat(txtUni.getText()) * Float.parseFloat(price.getText())));
 
                 }
@@ -446,6 +490,14 @@ public class ControladorCesta implements Initializable {
 
     public void actualizarImporteTotal(float precio, int uni) {
         txtImporteTotal.setText(String.valueOf(Float.parseFloat(txtImporteTotal.getText()) + precio * uni));
+    }
+    
+    public void actualizarPrecioTotal(){
+        float precioTotal = 0;
+        for(Pedidos p: LoginTemp.cesta.getPedidos()){
+            precioTotal += p.getPrecioTotal();
+        }
+        LoginTemp.cesta.setPrecioTotal(precioTotal);
     }
 
     public void limpiarCesta() {
@@ -470,69 +522,145 @@ public class ControladorCesta implements Initializable {
     }
 
     public void realizarCompra() {
-        Session s = NewHibernateUtil.getSession();
         Cuentas cuenta = null;
         boolean moroso = false;
-        if (LoginTemp.cesta != null) {
-            if (cmbPago.getSelectionModel().getSelectedItem() != null) {
-                if (rbTrans.isSelected()) {
-                    LoginTemp.cesta.setFormaPago(true);
-
-                    cuenta = (Cuentas) s.get(Cuentas.class, cmbPago.getSelectionModel().getSelectedItem().toString());
-                    if (cuenta.getSaldo() < (Float.parseFloat(txtImporteTotal.getText()))) {
-                        lblQuejas.setText("No tienes saldo suficiente en tu cuenta para realizar este pedido, procedemos a borrar tu cuenta...");
-                        moroso = true;
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            if (LoginTemp.cesta != null) {
+                if (cmbPago.getSelectionModel().getSelectedItem() != null) {
+                    if (rbTrans.isSelected()) {
+                        LoginTemp.cesta.setFormaPago(true);
+                         
+                        cuenta = (Cuentas) s.get(Cuentas.class, cmbPago.getSelectionModel().getSelectedItem().toString());
+                        if (cuenta.getSaldo() < (Float.parseFloat(txtImporteTotal.getText()))) {
+                            lblQuejas.setText("No tienes saldo suficiente en tu cuenta para realizar este pedido, procedemos a borrar tu cuenta...");
+                            moroso = true;
+                        } else {
+                            cuenta.setSaldo(cuenta.getSaldo() - (Float.parseFloat(txtImporteTotal.getText())));
+                            LoginTemp.cesta.setCuenta(cuenta);
+                        }
                     } else {
+                        LoginTemp.cesta.setFormaPago(false);
+                        List<Cuentas> listaCuentas = s.createCriteria(Cuentas.class).list();
+                        for (Cuentas i : listaCuentas) {
+                            if (i.getTarjeta().getNumeroTarjeta().equals(cmbPago.getSelectionModel().getSelectedItem().toString())) {
+                                cuenta = i;
+                                break;
+                            }
+                        }
+
                         cuenta.setSaldo(cuenta.getSaldo() - (Float.parseFloat(txtImporteTotal.getText())));
                         LoginTemp.cesta.setCuenta(cuenta);
                     }
-                } else {
-                    LoginTemp.cesta.setFormaPago(false);
-                    List<Cuentas> listaCuentas = s.createCriteria(Cuentas.class).list();
-                    for (Cuentas i : listaCuentas) {
-                        if (i.getTarjeta().getNumeroTarjeta().equals(cmbPago.getSelectionModel().getSelectedItem().toString())) {
-                            cuenta = i;
-                            break;
+                    if (!moroso) {
+                        for (Pedidos i : LoginTemp.cesta.getPedidos()) {
+                            actualizarStock(i);
                         }
-                    }
+                        LoginTemp.setClienteActual((Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId()));
+                        LoginTemp.cesta.setFechaSolicitud(new Date());
+                        LoginTemp.cesta.setCliente(LoginTemp.getClienteActual());
+                        LoginTemp.getClienteActual().getCompras().add(LoginTemp.cesta);
 
-                    cuenta.setSaldo(cuenta.getSaldo() - (Float.parseFloat(txtImporteTotal.getText())));
-                    LoginTemp.cesta.setCuenta(cuenta);
-                }
-                if (!moroso) {
-                    for (Pedidos i : LoginTemp.cesta.getPedidos()) {
-                        i.actualizarStock();
-                    }
-                    LoginTemp.setClienteActual((Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId()));
-                    LoginTemp.cesta.setFechaSolicitud(new Date());
-                    LoginTemp.cesta.setCliente(LoginTemp.getClienteActual());
-                    LoginTemp.getClienteActual().getCompras().add(LoginTemp.cesta);
-
-                    Compras compra = new Compras(LoginTemp.cesta.getCliente(), LoginTemp.cesta.getCuenta(), LoginTemp.cesta.isFormaPago());
-                    compra.setPrecioTotal(Float.parseFloat(txtImporteTotal.getText()));
-                    s.beginTransaction();
-                    s.save(compra);
-                    s.getTransaction().commit();
-
-                    List<Compras> listaCompras = s.createCriteria(Compras.class).list();
-                    compra = listaCompras.get(listaCompras.size() - 1);
-                    for (Pedidos pe : LoginTemp.cesta.getPedidos()) {
-                        compra.getPedidos().add(pe);
-                        compra.setCompletado(true);
-                        pe.setCompra(compra);
-
+                        Compras compra = new Compras(LoginTemp.cesta.getCliente(), LoginTemp.cesta.getCuenta(), LoginTemp.cesta.isFormaPago());
+                        compra.setPrecioTotal(Float.parseFloat(txtImporteTotal.getText()));
                         s.beginTransaction();
-                        s.saveOrUpdate(compra);
+                        s.save(compra);
                         s.getTransaction().commit();
 
+                        List<Compras> listaCompras = s.createCriteria(Compras.class).list();
+                        compra = listaCompras.get(listaCompras.size() - 1);
+                        for (Pedidos pe : LoginTemp.cesta.getPedidos()) {
+                            compra.getPedidos().add(pe);
+                            compra.setCompletado(true);
+                            pe.setCompra(compra);
+
+                            s.beginTransaction();
+                            s.saveOrUpdate(compra);
+                            s.getTransaction().commit();
+
+                        }
+                        limpiarCesta();
                     }
-                    limpiarCesta();
+                    lblQuejas.setText("");
+                } else {
+                    lblQuejas.setText("Debes elegir una cuenta antes de realizar una compra");
                 }
-                lblQuejas.setText("");
-            } else {
-                lblQuejas.setText("Debes elegir una cuenta antes de realizar una compra");
             }
+            s.close();
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            if (LoginTemp.cesta != null) {
+                if (cmbPago.getSelectionModel().getSelectedItem() != null) {
+                    if (rbTrans.isSelected()) {
+                        LoginTemp.cesta.setFormaPago(true);
+                        CriteriaQuery cq = new CriteriaQuery(Cuentas.class, Where.equal("numeroCuenta", cmbPago.getSelectionModel().getSelectedItem().toString()));
+                        Objects<Cuentas> c = odb.getObjects(cq);
+                        cuenta = c.getFirst();
+                        if (c.getFirst().getSaldo() < (Float.parseFloat(txtImporteTotal.getText()))) {
+                            lblQuejas.setText("No tienes saldo suficiente en tu cuenta para realizar este pedido");
+                            moroso = true;
+                        } else {
+                            cuenta.setSaldo(cuenta.getSaldo() - (Float.parseFloat(txtImporteTotal.getText())));
+                            LoginTemp.cesta.setCuenta(cuenta);
+                        }
+                    } else {
+                        LoginTemp.cesta.setFormaPago(false);
+                        CriteriaQuery cq = new CriteriaQuery(Cuentas.class);
+                        Objects<Cuentas> listaCuentas = odb.getObjects(cq);
+                        for (Cuentas i : listaCuentas) {
+                            if (i.getTarjeta().getNumeroTarjeta().equals(cmbPago.getSelectionModel().getSelectedItem().toString())) {
+                                cuenta = i;
+                                break;
+                            }
+                        }
+
+                        cuenta.setSaldo(cuenta.getSaldo() - (Float.parseFloat(txtImporteTotal.getText())));
+                        LoginTemp.cesta.setCuenta(cuenta);
+                    }
+                    if (!moroso) {
+                        for (Pedidos i : LoginTemp.cesta.getPedidos()) {
+                            actualizarStock(i);
+                        }
+                        CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("dni", LoginTemp.getClienteActual().getDni()));
+                        Objects<Clientes> cli = odb.getObjects(cq);
+                        LoginTemp.setClienteActual((Clientes) cli.getFirst());
+                        LoginTemp.cesta.setFechaSolicitud(new Date());
+                        LoginTemp.cesta.setCliente(LoginTemp.getClienteActual());
+                        LoginTemp.getClienteActual().getCompras().add(LoginTemp.cesta);
+                        cq = new CriteriaQuery(Clientes.class, Where.equal("user", LoginTemp.getClienteActual().getUser()));
+                        Clientes client = (Clientes) (odb.getObjects(cq)).getFirst();
+                        Compras compra = new Compras(client, LoginTemp.cesta.getCuenta(), LoginTemp.cesta.isFormaPago());
+                        compra.setPrecioTotal(Float.parseFloat(txtImporteTotal.getText()));
+
+                        for (Pedidos pe : LoginTemp.cesta.getPedidos()) {
+                            CriteriaQuery cc = new CriteriaQuery(Productos.class, Where.equal("nombre", pe.getProducto().getNombre()));
+                            Productos p = (Productos) odb.getObjects(cc).getFirst();
+                            p.setStockActual(pe.getProducto().getStockActual());
+                            pe.setProducto(p);
+                            compra.getPedidos().add(pe);
+                            compra.setCompletado(true);
+                            pe.setCompra(compra);
+                        }
+                        
+                        odb.store(compra);
+                        odb.commit();
+                        limpiarCesta();
+                        lblQuejas.setText("");
+                    }
+                } else {
+                    lblQuejas.setText("Debes elegir una cuenta antes de realizar una compra");
+                }
+            }
+            odb.close();
         }
-        s.close();
+    }
+    
+    public void actualizarStock(Pedidos i){
+        Productos p = i.getProducto();
+        if (p.getStockActual() - i.getCantidad() < p.getStockMin()){
+            p.setStockActual(p.getStockMax());
+        } else {
+            p.setStockActual(i.getProducto().getStockActual()-i.getCantidad());
+        }
     }
 }

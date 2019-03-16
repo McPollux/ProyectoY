@@ -19,13 +19,16 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -33,6 +36,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -40,6 +45,11 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import org.hibernate.Session;
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.Objects;
+import org.neodatis.odb.core.query.criteria.Where;
+import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 
 /**
  *
@@ -63,7 +73,7 @@ public class ControladorPedidos implements Initializable {
         if (b == -1) {
             System.exit(0);
         }
-        
+
     }
 
     @FXML
@@ -108,9 +118,21 @@ public class ControladorPedidos implements Initializable {
     }
 
     public static List<Compras> listar() {
-        Session s = NewHibernateUtil.getSession();
-        List<Compras> p = s.createCriteria(Compras.class).list();
-        s.close();
+        List<Compras> p = new ArrayList();
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            p = s.createCriteria(Compras.class).list();
+            s.close();
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Compras.class);
+            Objects<Compras> prod = odb.getObjects(cq);
+
+            p.addAll(prod);
+            System.out.println(p.size());
+            
+            odb.close();
+        }
         return p;
     }
 
@@ -122,15 +144,62 @@ public class ControladorPedidos implements Initializable {
 
     @FXML
     public void buscar() {
-        Session s = NewHibernateUtil.getSession();
-        List<Productos> p = s.createCriteria(Productos.class).list();
-        s.close();
+        List<Productos> pr = new ArrayList();
+        Clientes cli = null;
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            pr = s.createCriteria(Productos.class).list();
+            s.close();
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("dni", LoginTemp.getClienteActual().getDni()));
+            Objects<Clientes> c = odb.getObjects(cq);
+            cli = c.getFirst();
+            odb.close();
+        }
         vbProductos.getChildren().clear();
-        for (Productos productos : p) {
+        ArrayList<Compras> compras = new ArrayList<>();
+            compras.addAll(cli.getCompras());
+            System.out.println(compras.size());
+            for (int i = 0; i < compras.size() - 1; i++) {
+                for (int j = i + 1; j < compras.size(); j++) {
+                    if (compras.get(i).getFechaSolicitud().compareTo(compras.get(j).getFechaSolicitud()) <= 0) {
+                        Compras aux = compras.get(i);
+                        Compras aux2 = compras.get(j);
+                        compras.remove(aux);
+                        compras.remove(aux2);
+                        compras.add(i,aux2);
+                        compras.add(j,aux);
+                    }
+                }
+            }
+        for (Compras cc : compras) {
+            for (Pedidos p : cc.getPedidos()) {
+                if (p.getProducto().getNombre().toLowerCase().matches(".*" + txtBuscar.getText().toLowerCase() + ".*")) {
+                    try {
+                        BufferedImage img = ImageIO.read(new ByteArrayInputStream(p.getProducto().getImg()));
+                        Image imgProd = SwingFXUtils.toFXImage(img, null);
+                        ImageView imgDefinitive = new ImageView(imgProd);
 
-            if (productos.getNombre().matches(".*" + txtBuscar.getText() + ".*")) {
-                ImageView img = new ImageView("/fotos/ImagenFalsa.jpg");
-                Inserciones.AnhadirProducto(vbProductos, productos.getNombre(), productos.getDescripcion(), productos.getPrecio(), img);
+                        MisPedidos(vbProductos, p.getProducto().getNombre(), p.getProducto().getDescripcion(), cc.getFechaSolicitud(), p.getCantidad(), p.getPrecioTotal(),
+                                p.getProducto().getPrecio(), imgDefinitive);
+                    } catch (IOException ex) {
+
+                    }
+                }
+            }
+        }
+    }
+
+    @FXML
+    public void on_enter(Event evt) {
+        KeyEvent e = (KeyEvent) evt;
+        if (e.getCode() == KeyCode.ENTER) {
+
+            try {
+                buscar();
+            } catch (Exception ex) {
+
             }
 
         }
@@ -160,7 +229,7 @@ public class ControladorPedidos implements Initializable {
         name.setPrefSize(380, 42);
         name.setAlignment(Pos.CENTER);
         JFXTextArea description = new JFXTextArea(descripcion);
-        
+
         description.setFocusColor(Paint.valueOf("#fff"));
         description.setUnFocusColor(Paint.valueOf("#fff"));
         description.setPrefSize(380, 114);
@@ -194,27 +263,75 @@ public class ControladorPedidos implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         MoverVentanas(panel);
         miNombre.setText(LoginTemp.getClienteActual().getNombre());
-        Session s = NewHibernateUtil.getSession();
-        Clientes cli = (Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId());
-
-        for (Compras c : cli.getCompras()) {
-            for (Pedidos p : c.getPedidos()) {
-                try {
-                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(p.getProducto().getImg()));
-                    Image imgProd = SwingFXUtils.toFXImage(img, null);
-                    ImageView imgDefinitive = new ImageView(imgProd);
-
-                    MisPedidos(vbProductos, p.getProducto().getNombre(), p.getProducto().getDescripcion(), c.getFechaSolicitud(), p.getCantidad(), p.getPrecioTotal(),
-                            p.getProducto().getPrecio(), imgDefinitive);
-                } catch (IOException ex) {
-
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            Clientes cli = (Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId());
+            ArrayList<Compras> compras = new ArrayList<>();
+            compras.addAll(cli.getCompras());
+            for (int i = 0; i < compras.size() - 1; i++) {
+                for (int j = i + 1; j < compras.size(); j++) {
+                    if (compras.get(i).getFechaSolicitud().compareTo(compras.get(j).getFechaSolicitud()) < 0) {
+                        Compras aux = compras.get(i);
+                        compras.add(i,compras.get(j));
+                        compras.add(j,aux);
+                    }
                 }
             }
+            for (Compras c : compras) {
+                for (Pedidos p : c.getPedidos()) {
+                    try {
+                        BufferedImage img = ImageIO.read(new ByteArrayInputStream(p.getProducto().getImg()));
+                        Image imgProd = SwingFXUtils.toFXImage(img, null);
+                        ImageView imgDefinitive = new ImageView(imgProd);
+
+                        MisPedidos(vbProductos, p.getProducto().getNombre(), p.getProducto().getDescripcion(), c.getFechaSolicitud(), p.getCantidad(), p.getPrecioTotal(),
+                                p.getProducto().getPrecio(), imgDefinitive);
+                    } catch (IOException ex) {
+
+                    }
+                }
+            }
+            s.close();
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("dni", LoginTemp.getClienteActual().getDni()));
+            Objects<Clientes> c = odb.getObjects(cq);
+            Clientes cli = c.getFirst();
+            ArrayList<Compras> compras = new ArrayList<>();
+            compras.addAll(cli.getCompras());
+            System.out.println(compras.size());
+            for (int i = 0; i < compras.size() - 1; i++) {
+                for (int j = i + 1; j < compras.size(); j++) {
+                    if (compras.get(i).getFechaSolicitud().compareTo(compras.get(j).getFechaSolicitud()) <= 0) {
+                        Compras aux = compras.get(i);
+                        Compras aux2 = compras.get(j);
+                        compras.remove(aux);
+                        compras.remove(aux2);
+                        compras.add(i,aux2);
+                        compras.add(j,aux);
+                    }
+                }
+            }
+            for (Compras cc : compras) {
+                for (Pedidos p : cc.getPedidos()) {
+                    try {
+                        BufferedImage img = ImageIO.read(new ByteArrayInputStream(p.getProducto().getImg()));
+                        Image imgProd = SwingFXUtils.toFXImage(img, null);
+                        ImageView imgDefinitive = new ImageView(imgProd);
+
+                        MisPedidos(vbProductos, p.getProducto().getNombre(), p.getProducto().getDescripcion(), cc.getFechaSolicitud(), p.getCantidad(), p.getPrecioTotal(),
+                                p.getProducto().getPrecio(), imgDefinitive);
+                    } catch (IOException ex) {
+
+                    }
+                }
+            }
+            odb.close();
         }
-        s.close();
 
     }
-        private void MoverVentanas(Pane root) {
+
+    private void MoverVentanas(Pane root) {
 
         AtomicReference<Double> xOffset = new AtomicReference<>((double) 0);
         AtomicReference<Double> yOffset = new AtomicReference<>((double) 0);

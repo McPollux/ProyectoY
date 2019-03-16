@@ -1,6 +1,8 @@
 package Objetos;
 
 import com.mysql.jdbc.Blob;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 
 
@@ -60,7 +62,7 @@ public class Productos  implements Serializable {
 
     public void setStockActual(int valorNuevo) {
         
-        stockActual=valorNuevo;
+        this.stockActual = valorNuevo;
     }
 
     public String getNombre() {
@@ -103,4 +105,5 @@ public class Productos  implements Serializable {
         this.descripcion = descripcion;
     }
     
+  
 }

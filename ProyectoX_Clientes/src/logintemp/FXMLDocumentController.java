@@ -9,6 +9,7 @@ import Objetos.Clientes;
 import Recursos.Windows;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +29,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -36,6 +38,13 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.hibernate.Session;
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.Objects;
+import org.neodatis.odb.core.query.IQuery;
+import org.neodatis.odb.core.query.criteria.ICriterion;
+import org.neodatis.odb.core.query.criteria.Where;
+import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 
 /**
  *
@@ -46,7 +55,7 @@ public class FXMLDocumentController implements Initializable {
     private Windows win = new Windows();
     @FXML
     private ImageView btnlogin;
-    
+
     @FXML
     private Pane panel;
     @FXML
@@ -57,6 +66,14 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private Label txtAviso;
+    @FXML
+    private JFXRadioButton rbHibernate;
+
+    @FXML
+    private ToggleGroup bbdd;
+
+    @FXML
+    private JFXRadioButton rbNeodatis;
 
     @FXML
     public void registro(ActionEvent event) throws IOException {
@@ -76,20 +93,38 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public boolean confirmarCliente() {
-        Session s = NewHibernateUtil.getSession();
-        List<Clientes> clientes = s.createCriteria(Clientes.class).list();
-        boolean b = false;
-        for (Clientes c : clientes) {
-            if (c.getUser().equals(txtUser.getText())) {
-                if (c.getContrasenha() == txtPass.getText().hashCode()) {
-                    b = true;
-                    LoginTemp.setClienteActual(c);  
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            List<Clientes> clientes = s.createCriteria(Clientes.class).list();
+            boolean b = false;
+            for (Clientes c : clientes) {
+                if (c.getUser().equals(txtUser.getText())) {
+                    if (c.getContrasenha() == txtPass.getText().hashCode()) {
+                        b = true;
+                        LoginTemp.setClienteActual(c);
+                    }
+                    break;
                 }
-                break;
             }
+            s.close();
+            return b;
+        } else {
+            ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+            IQuery cq = new CriteriaQuery(Clientes.class).setPolymorphic(true);
+            Objects<Clientes> clientes = odb.getObjects(cq);
+            boolean b = false;
+            for (Clientes c : clientes) {
+                if (c.getUser().equals(txtUser.getText())) {
+                    if (c.getContrasenha() == txtPass.getText().hashCode()) {
+                        b = true;
+                        LoginTemp.setClienteActual(c);
+                    }
+                    break;
+                }
+            }
+            odb.close();
+            return b;
         }
-        s.close();
-        return b;
     }
 
     @FXML
@@ -100,7 +135,7 @@ public class FXMLDocumentController implements Initializable {
             try {
                 login();
             } catch (IOException ex) {
-                
+
             }
 
         }
@@ -113,11 +148,26 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       txtAviso.setAlignment(Pos.CENTER);
+        txtAviso.setAlignment(Pos.CENTER);
         MoverVentanas(panel);
-       
+        if(LoginTemp.bbdd == 0){
+        rbHibernate.setSelected(true);
+        }
+        else{
+        rbNeodatis.setSelected(true);
+        }
+
     }
-    
+
+    @FXML
+    public void BBDD() {
+        if (rbHibernate.isSelected()) {
+            LoginTemp.bbdd = 0;
+        } else {
+            LoginTemp.bbdd = 1;
+        }
+    }
+
     private void MoverVentanas(Pane root) {
 
         AtomicReference<Double> xOffset = new AtomicReference<>((double) 0);

@@ -22,6 +22,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.hibernate.Session;
+import org.neodatis.odb.ODB;
+import org.neodatis.odb.ODBFactory;
 
 /**
  *
@@ -90,18 +92,28 @@ public class ControladorRegistrar implements Initializable {
                     } else {
                         boolean b = Validaciones.mail(txtEmail.getText());
                         if (b) {
-
-                            Session s = NewHibernateUtil.getSession();
-                            int contra = txtPass.getText().hashCode();
-                            Clientes c = new Clientes(txtUsuario.getText(),
-                                    contra, txtDni.getText(), txtNombre.getText(), txtDireccion.getText(),
-                                     txtTelefono.getText(), txtEmail.getText());
-                            s.beginTransaction();
-                            s.saveOrUpdate(c);
-                            s.getTransaction().commit();
-                            s.close();
-                            win.abrirVentana("/logintemp/FXMLDocument.fxml");
-                            win.cerrarVentana(txtDni);
+                            if (LoginTemp.bbdd == 0) {
+                                Session s = NewHibernateUtil.getSession();
+                                int contra = txtPass.getText().hashCode();
+                                Clientes c = new Clientes(txtUsuario.getText(),
+                                        contra, txtDni.getText(), txtNombre.getText(), txtDireccion.getText(),
+                                        txtTelefono.getText(), txtEmail.getText());
+                                s.beginTransaction();
+                                s.saveOrUpdate(c);
+                                s.getTransaction().commit();
+                                s.close();
+                            } else {
+                                ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
+                                int contra = txtPass.getText().hashCode();
+                                Clientes c = new Clientes(txtUsuario.getText(),
+                                        contra, txtDni.getText(), txtNombre.getText(), txtDireccion.getText(),
+                                        txtTelefono.getText(), txtEmail.getText());
+                                odb.store(c);
+                                odb.commit();
+                                odb.close();
+                            }
+                             win.abrirVentana("/logintemp/FXMLDocument.fxml");
+                                win.cerrarVentana(txtDni);
                         } else {
 
                             lblAviso.setText("introduce un formato válido para el correo");
@@ -119,6 +131,7 @@ public class ControladorRegistrar implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         MoverVentanas(panel);
     }
+
     private void MoverVentanas(Pane root) {
 
         AtomicReference<Double> xOffset = new AtomicReference<>((double) 0);

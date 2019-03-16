@@ -307,7 +307,7 @@ public class Altas {
             }
         }
 
-        if (descripcion != null) {
+        if (!descripcion.equalsIgnoreCase("") && descripcion != null) {
             descripcion = descripcion.substring(0, 1).toUpperCase() + descripcion.substring(1);
         }
 
