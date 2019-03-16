@@ -8,7 +8,6 @@ import java.io.Serializable;
 
 public class Productos  implements Serializable {
     
-    private PropertyChangeSupport propertySupport=new PropertyChangeSupport(this);
     private int id;
     private int stockMin;
     private int stockMax;
@@ -63,10 +62,7 @@ public class Productos  implements Serializable {
 
     public void setStockActual(int valorNuevo) {
         
-        if(valorNuevo<stockMin)
-            propertySupport.firePropertyChange("stockActual",stockActual,valorNuevo);
-        else
-            stockActual=valorNuevo;
+        this.stockActual = valorNuevo;
     }
 
     public String getNombre() {
@@ -109,12 +105,5 @@ public class Productos  implements Serializable {
         this.descripcion = descripcion;
     }
     
-    public void addListener(PropertyChangeListener listener) {
-        propertySupport.addPropertyChangeListener(listener);
-    }
-    
-    public void removeListener(PropertyChangeListener listener) {
-        propertySupport.removePropertyChangeListener(listener);
-    }
-    
+  
 }

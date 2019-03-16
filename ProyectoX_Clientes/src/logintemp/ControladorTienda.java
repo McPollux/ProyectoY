@@ -38,6 +38,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -126,18 +128,6 @@ public class ControladorTienda implements Initializable {
         win.cerrarVentana(txtBuscar);
     }
 
-    @FXML
-    public void productoJaj() {
-        /*vbProductos.setSpacing(30);
-        ImageView img = new ImageView("/fotos/ImagenFalsa.jpg");
-        ins.AnhadirProducto(vbProductos, "Manzanas", "pues est�n ricas bb me encantan tus bideos vegeta\n t kiero bb",
-                1500, img);*/
-        //vbProductos.getChildren().clear();
-
-        for (Pedidos object : LoginTemp.cesta.getPedidos()) {
-            System.out.println(object.getCantidad() + "  " + object.getProducto().getNombre());
-        }
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -213,7 +203,7 @@ public class ControladorTienda implements Initializable {
         vbProductos.getChildren().clear();
         for (Productos productos : p) {
 
-            if (productos.getNombre().matches(".*" + txtBuscar.getText() + ".*")) {
+            if (productos.getNombre().toLowerCase().matches(".*" + txtBuscar.getText().toLowerCase() + ".*")) {
                 try {
                     BufferedImage img = ImageIO.read(new ByteArrayInputStream(productos.getImg()));
                     Image imgProd = SwingFXUtils.toFXImage(img, null);
@@ -222,6 +212,19 @@ public class ControladorTienda implements Initializable {
                 } catch (IOException ex) {
 
                 }
+            }
+
+        }
+    }
+    @FXML
+    public void on_enter(Event evt) {
+        KeyEvent e = (KeyEvent) evt;
+        if (e.getCode() == KeyCode.ENTER) {
+
+            try {
+                buscar();
+            } catch (Exception ex) {
+
             }
 
         }
@@ -286,10 +289,10 @@ public class ControladorTienda implements Initializable {
     public void volverSum(ImageView imgReal) {
         Image img = new Image("/fotos/comprobado.png");
         imgReal.setImage(img);
+        imgReal.setDisable(true);
     }
 
     public void anhadirCesta(String nombre, HBox columna, ImageView imgPlus) {
-        System.out.println("Llegó a añadir cesta");
         List<Productos> p = new ArrayList<>();
         byte b = 0;
         if (LoginTemp.bbdd == 0) {
