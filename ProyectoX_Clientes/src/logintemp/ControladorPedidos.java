@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -118,15 +119,18 @@ public class ControladorPedidos implements Initializable {
 
     public static List<Compras> listar() {
         List<Compras> p = new ArrayList();
-        if (LoginTemp.bbdd == 0){
-        Session s = NewHibernateUtil.getSession();
-         p = s.createCriteria(Compras.class).list();
-        s.close();}
-        else{
+        if (LoginTemp.bbdd == 0) {
+            Session s = NewHibernateUtil.getSession();
+            p = s.createCriteria(Compras.class).list();
+            s.close();
+        } else {
             ODB odb = ODBFactory.openClient("localhost", 8000, "proyectojjcv");
             CriteriaQuery cq = new CriteriaQuery(Compras.class);
             Objects<Compras> prod = odb.getObjects(cq);
+
             p.addAll(prod);
+            System.out.println(p.size());
+            
             odb.close();
         }
         return p;
@@ -154,9 +158,24 @@ public class ControladorPedidos implements Initializable {
             odb.close();
         }
         vbProductos.getChildren().clear();
-        for (Compras cc : cli.getCompras()) {
-                for (Pedidos p : cc.getPedidos()) {
-                    if (p.getProducto().getNombre().toLowerCase().matches(".*" + txtBuscar.getText().toLowerCase() + ".*")) {
+        ArrayList<Compras> compras = new ArrayList<>();
+            compras.addAll(cli.getCompras());
+            System.out.println(compras.size());
+            for (int i = 0; i < compras.size() - 1; i++) {
+                for (int j = i + 1; j < compras.size(); j++) {
+                    if (compras.get(i).getFechaSolicitud().compareTo(compras.get(j).getFechaSolicitud()) <= 0) {
+                        Compras aux = compras.get(i);
+                        Compras aux2 = compras.get(j);
+                        compras.remove(aux);
+                        compras.remove(aux2);
+                        compras.add(i,aux2);
+                        compras.add(j,aux);
+                    }
+                }
+            }
+        for (Compras cc : compras) {
+            for (Pedidos p : cc.getPedidos()) {
+                if (p.getProducto().getNombre().toLowerCase().matches(".*" + txtBuscar.getText().toLowerCase() + ".*")) {
                     try {
                         BufferedImage img = ImageIO.read(new ByteArrayInputStream(p.getProducto().getImg()));
                         Image imgProd = SwingFXUtils.toFXImage(img, null);
@@ -167,16 +186,12 @@ public class ControladorPedidos implements Initializable {
                     } catch (IOException ex) {
 
                     }
-                    }
                 }
             }
-            }
+        }
+    }
 
-        
-        
-
-    
-     @FXML
+    @FXML
     public void on_enter(Event evt) {
         KeyEvent e = (KeyEvent) evt;
         if (e.getCode() == KeyCode.ENTER) {
@@ -251,8 +266,18 @@ public class ControladorPedidos implements Initializable {
         if (LoginTemp.bbdd == 0) {
             Session s = NewHibernateUtil.getSession();
             Clientes cli = (Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId());
-
-            for (Compras c : cli.getCompras()) {
+            ArrayList<Compras> compras = new ArrayList<>();
+            compras.addAll(cli.getCompras());
+            for (int i = 0; i < compras.size() - 1; i++) {
+                for (int j = i + 1; j < compras.size(); j++) {
+                    if (compras.get(i).getFechaSolicitud().compareTo(compras.get(j).getFechaSolicitud()) < 0) {
+                        Compras aux = compras.get(i);
+                        compras.add(i,compras.get(j));
+                        compras.add(j,aux);
+                    }
+                }
+            }
+            for (Compras c : compras) {
                 for (Pedidos p : c.getPedidos()) {
                     try {
                         BufferedImage img = ImageIO.read(new ByteArrayInputStream(p.getProducto().getImg()));
@@ -272,7 +297,22 @@ public class ControladorPedidos implements Initializable {
             CriteriaQuery cq = new CriteriaQuery(Clientes.class, Where.equal("dni", LoginTemp.getClienteActual().getDni()));
             Objects<Clientes> c = odb.getObjects(cq);
             Clientes cli = c.getFirst();
-             for (Compras cc : cli.getCompras()) {
+            ArrayList<Compras> compras = new ArrayList<>();
+            compras.addAll(cli.getCompras());
+            System.out.println(compras.size());
+            for (int i = 0; i < compras.size() - 1; i++) {
+                for (int j = i + 1; j < compras.size(); j++) {
+                    if (compras.get(i).getFechaSolicitud().compareTo(compras.get(j).getFechaSolicitud()) <= 0) {
+                        Compras aux = compras.get(i);
+                        Compras aux2 = compras.get(j);
+                        compras.remove(aux);
+                        compras.remove(aux2);
+                        compras.add(i,aux2);
+                        compras.add(j,aux);
+                    }
+                }
+            }
+            for (Compras cc : compras) {
                 for (Pedidos p : cc.getPedidos()) {
                     try {
                         BufferedImage img = ImageIO.read(new ByteArrayInputStream(p.getProducto().getImg()));
@@ -286,7 +326,7 @@ public class ControladorPedidos implements Initializable {
                     }
                 }
             }
-             odb.close();
+            odb.close();
         }
 
     }
