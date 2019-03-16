@@ -511,7 +511,7 @@ public class ControladorCesta implements Initializable {
                 if (cmbPago.getSelectionModel().getSelectedItem() != null) {
                     if (rbTrans.isSelected()) {
                         LoginTemp.cesta.setFormaPago(true);
-                        
+                         
                         cuenta = (Cuentas) s.get(Cuentas.class, cmbPago.getSelectionModel().getSelectedItem().toString());
                         if (cuenta.getSaldo() < (Float.parseFloat(txtImporteTotal.getText()))) {
                             lblQuejas.setText("No tienes saldo suficiente en tu cuenta para realizar este pedido, procedemos a borrar tu cuenta...");
@@ -535,7 +535,7 @@ public class ControladorCesta implements Initializable {
                     }
                     if (!moroso) {
                         for (Pedidos i : LoginTemp.cesta.getPedidos()) {
-                            i.actualizarStock();
+                            actualizarStock(i);
                         }
                         LoginTemp.setClienteActual((Clientes) s.get(Clientes.class, LoginTemp.getClienteActual().getId()));
                         LoginTemp.cesta.setFechaSolicitud(new Date());
